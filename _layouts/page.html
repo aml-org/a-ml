@@ -1,0 +1,97 @@
+{% include header.html %}
+
+{% include nav.html %}
+
+<div class="container page-content {{ page.style_class }}">
+    <div class="row">
+        <aside class="col-lg-4 col-md-4 col-sm-12" role = "complementary">
+            <div class="region-sidebar well" >                                
+                <section class="sidebar-menu">
+                    {% include about-aml-sidebar.html %}
+                    <section class="amlapilinks">
+                        <div class="aml-links-wrapper">
+                            <a href ="" target="_blank" class="btn btn-primary" onclick="ga('send', 'event', 'CTA', 'Click', '1.0-spec');">Button</a>
+                        </div>
+                    </section>
+                </section>   
+            </div>
+        </aside>
+        <hr style="border-color: #EDF0F4;margin: 0 15px;width: 100%;" class="d-sm-block d-md-none">
+        <div class="col-lg-7 col-md-8 col-sm-12 offset-lg-1 article-content">
+            <h1 class="page-header">{{ page.title }}</h1>
+            {% if page.is_post  and page.title != 'Blogs' and page.title != 'Blogs Archive' %}
+            <div class="sharethis-inline-share-buttons"></div>
+            <div class="page-meta">
+             <div class="post_author">By : {{ page.author }}</div>
+            <div class="post_date"> {{ page.date | date: "%B %-d, %Y" }}</div>
+                <div class="post_categories"> Category
+                    {% if page.categories.size > 0 %} : {% for cat in page.categories %}
+                    {% assign wordCount = cat | number_of_words %}
+                    {% if wordCount > 1 %}
+                    {% assign my_array_cat = cat | split: " " | join: "+" %}
+                    <a href="{{ site.baseurl }}/blog-cat?cat={{ my_array_cat | downcase }}">{{ cat }}</a>
+                    {% else %}
+                    <a href="{{ site.baseurl }}/blog-cat?cat={{ cat | downcase }}">{{ cat }}</a>
+                    {% endif %}
+                    {% if forloop.last == false %}, {% endif %}
+                    {% endfor %}{% endif %}
+                </div>
+                <div class="post_tag"> Tags
+                    {% if page.tags.size > 0 %} : {% for tag in page.tags %}
+                    {% assign wordCounts = tag | number_of_words %}
+                    {% if wordCounts > 1 %}
+                    {% assign my_array_tag = tag | split: " " | join: "+" %}
+                    <a href="{{ site.baseurl }}/blogtag?tag={{ my_array_tag | downcase }}">{{ tag }}</a>
+                    {% else %}
+                    <a href="{{ site.baseurl }}/blogtag?tag={{ tag | downcase }}">{{ tag }}</a>
+                    {% endif %}
+                    {% if forloop.last == false %}, {% endif %}
+                    {% endfor %}{% endif %}
+                </div>
+             </div>
+            {% endif %}
+            {% if page.is_post  and page.title != 'Blogs' and page.title != 'Blogs Archive' %}
+            <div class="blog_post_content">
+                {{ content }}
+
+                {% if page.comments %}
+                <div class="comment">
+                    <div id="disqus_thread"></div>
+                    <script>
+
+                        /**
+                         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                        /*
+                         var disqus_config = function () {
+                         this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                         this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                         };
+                         */
+                        (function() { // DON'T EDIT BELOW THIS LINE
+                            var d = document, s = d.createElement('script');
+                            s.src = 'https://raml.disqus.com/embed.js';
+                            s.setAttribute('data-timestamp', +new Date());
+                            (d.head || d.body).appendChild(s);
+                        })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                    <script id="dsq-count-scr" src="//raml.disqus.com/count.js" async></script>
+                 </div>
+                {% endif %}
+            </div>
+            {% else %}
+            {{ content }}
+            {% endif %}
+
+            {% if page.is_post  and page.title != 'Blogs' and page.title != 'Blogs Archive' %}
+             <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58c80890f3235300114bf49f&product=inline-share-buttons"></script>
+            {% endif %}
+
+
+    </div>
+
+</div><!-- /.container -->
+</div>
+
+{% include footer.html %}
