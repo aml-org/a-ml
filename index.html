@@ -365,9 +365,19 @@ title:  'Welcome'
     const buttons = document.getElementsByClassName('try-it-out-btn');
     Array.from(buttons).forEach((btn) => {
       btn.onclick = () => {
-        const dialectQs = `dialect=${encodeURIComponent(dialectEditor.getValue())}`
-        const documentQs = `document=${encodeURIComponent(documentEditor.getValue())}`
-        const demoUrl = `${PLAYGROUND_URL}?${dialectQs}&${documentQs}`;
+        let demoUrl = PLAYGROUND_URL
+        const dialectVal = dialectEditor.getValue()
+        const documentVal = documentEditor.getValue()
+        let qsPieces = []
+        if (dialectVal) {
+          qsPieces.push(`dialect=${encodeURIComponent(dialectVal)}`)
+        }
+        if (documentVal) {
+          qsPieces.push(`document=${encodeURIComponent(documentVal)}`)
+        }
+        if (qsPieces.length) {
+          demoUrl += `?${qsPieces.join('&')}`
+        }
         window.open(demoUrl);
         return false;
       }
