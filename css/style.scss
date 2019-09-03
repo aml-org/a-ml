@@ -158,15 +158,15 @@ p{
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5);
-    z-index: 2; 
+    z-index: 2;
 }
 .padd_00{padding: 0;}
 
-header{  
+header{
   background-image: url(/images/vS_nzadp.png);
   background-size: cover;
   background-repeat: no-repeat;
- } 
+ }
   .navbar-expand-md{
     background-color: transparent;border-color:transparent;padding: 30px 15px 25px;margin-bottom: 35px;
     @media(max-width: 767px){
@@ -195,9 +195,9 @@ header{
         background-image: url("/images/toggle.png");
         background-repeat: no-repeat;
         width: 26px;
-        height: 22px; 
+        height: 22px;
       }
-    } 
+    }
     .navbar-toggler:focus{
       outline: none;
     }
@@ -214,7 +214,7 @@ header{
             padding: 12px;
           }
             @media(max-width: 767px){
-              font-size: 18px;              
+              font-size: 18px;
             }
           .caret{
             @media(max-width: 767px){
@@ -269,17 +269,17 @@ header{
             a{
               color:$slate-gray;opacity: 1;padding: 6px 25px;font-size: $font-face-small;line-height: 16px;display: block;font-family: $font-face-medium;
                @media(max-width: 767px){
-                color:$black;        
+                color:$black;
                 font-weight: normal;
-                padding: 10px 25px;               
-               } 
+                padding: 10px 25px;
+               }
             }
             a:active{
               background-color: transparent;
             }
             @media(min-width: 768px){
               a:hover{color:$slate-gray;background-color: transparent;}
-            } 
+            }
             li:hover{
               @media(max-width: 767px){
                 background-color: transparent;
@@ -330,7 +330,7 @@ header{
       margin-right: auto;
       padding-left: 15px;
       padding-right:15px;
-      
+
       @media screen and (min-width: 768px){
         max-width: 720px
       }
@@ -378,9 +378,9 @@ header{
   }
 }
 
-.aml-editor{  
+.aml-editor{
   position: relative;
-  
+
   h2{
     font-family: 'Roboto-Regular';background-color: $ghost-white;box-shadow: 0 -1px 0 0 #DBE8FD;  font-size: $font-face-small;  font-weight: 500; line-height: 16px;margin:0;padding: 20px;width: 100%;
   }
@@ -388,7 +388,7 @@ header{
     h3{
       padding: 15px;
       background-color:#eef2f9;
-      font-size: $font-face-small; 
+      font-size: $font-face-small;
     }
   }
   .editor-2{
@@ -414,10 +414,10 @@ header{
     background-color: $slate-gray;
     color: $white;
     font-family: 'Roboto-Regular';
-    font-size: $font-face-small; 
-    font-weight: 600; 
-    letter-spacing: 0.44px; 
-    line-height: 16px;  
+    font-size: $font-face-small;
+    font-weight: 600;
+    letter-spacing: 0.44px;
+    line-height: 16px;
     text-align: center;
 
   }
@@ -431,6 +431,17 @@ header{
     display: flow-root;
     box-shadow: 1px 0px 3px #808080;
     .monaco-editor{
+      .monaco-editor-hover{
+        background-color: $light-slate-gray !important;
+        border-color: $azureish-white !important;
+        p {
+          color: $azureish-white;
+        }
+      }
+      .selected-line-editor-decoration{
+        background-color: $azureish-white;
+        width: 7px !important;
+      }
       .editor-scrollable{
         .view-lines{
           .mtk26,.mtk23,.mtk21{
@@ -445,7 +456,7 @@ header{
           }
         }
       }
-    }  
+    }
     .line-numbers{
       color: #9EAAB7;
     }
@@ -458,11 +469,11 @@ header{
   padding-bottom: 73px;
   @media(max-width: 991px){
     padding-bottom: 63px;
-  } 
+  }
   @media(max-width: 575px){
     padding-top:50px;
     padding-bottom: 0px;
-  } 
+  }
   h3{
     color: $royal-blue;
     margin-top: 20px;
@@ -583,7 +594,7 @@ header{
       .side_bar{
         @media screen and (max-width: 767px){
           float:left;
-          width: 82%;          
+          width: 82%;
         }
 
         @media screen and (max-width: 575px){
@@ -659,8 +670,8 @@ header{
             float:none;
           }
         .dropdown-menu{
-          padding: 10px;    
-          width: 250px;    
+          padding: 10px;
+          width: 250px;
         }
         .dropdown-toggle {
           border: 2px solid;
@@ -706,7 +717,7 @@ header{
         padding-top: 10px;
       }
     }
-  }    
+  }
   ul{
     display: inline-block;
     padding: 0;
@@ -732,7 +743,7 @@ header{
         @media(max-width: 390px){
           padding:10px 0;
         }
-      }      
+      }
     }
     li:nth-child(1) a{
         padding-left: 0;
@@ -746,7 +757,7 @@ header{
   }
   .col-md-9{
     margin-top: 10px;
-  } 
+  }
   .col-md-3{
     margin-top: 10px;
   }
@@ -864,40 +875,40 @@ header{
 .sk-fading-circle .sk-circle11 {
   -webkit-transform: rotate(300deg);
       -ms-transform: rotate(300deg);
-          transform: rotate(300deg); 
+          transform: rotate(300deg);
 }
 .sk-fading-circle .sk-circle12 {
   -webkit-transform: rotate(330deg);
       -ms-transform: rotate(330deg);
-          transform: rotate(330deg); 
+          transform: rotate(330deg);
 }
 .sk-fading-circle .sk-circle2:before {
   -webkit-animation-delay: -1.1s;
-          animation-delay: -1.1s; 
+          animation-delay: -1.1s;
 }
 .sk-fading-circle .sk-circle3:before {
   -webkit-animation-delay: -1s;
-          animation-delay: -1s; 
+          animation-delay: -1s;
 }
 .sk-fading-circle .sk-circle4:before {
   -webkit-animation-delay: -0.9s;
-          animation-delay: -0.9s; 
+          animation-delay: -0.9s;
 }
 .sk-fading-circle .sk-circle5:before {
   -webkit-animation-delay: -0.8s;
-          animation-delay: -0.8s; 
+          animation-delay: -0.8s;
 }
 .sk-fading-circle .sk-circle6:before {
   -webkit-animation-delay: -0.7s;
-          animation-delay: -0.7s; 
+          animation-delay: -0.7s;
 }
 .sk-fading-circle .sk-circle7:before {
   -webkit-animation-delay: -0.6s;
-          animation-delay: -0.6s; 
+          animation-delay: -0.6s;
 }
 .sk-fading-circle .sk-circle8:before {
   -webkit-animation-delay: -0.5s;
-          animation-delay: -0.5s; 
+          animation-delay: -0.5s;
 }
 .sk-fading-circle .sk-circle9:before {
   -webkit-animation-delay: -0.4s;
@@ -923,5 +934,5 @@ header{
 
 @keyframes sk-circleFadeDelay {
   0%, 39%, 100% { opacity: 0; }
-  40% { opacity: 1; } 
+  40% { opacity: 1; }
 }

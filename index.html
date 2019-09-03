@@ -106,6 +106,7 @@ title:  'Welcome'
       </div>
   </section>
   <script src="/min/vs/loader.js" type="text/javascript"></script>
+  <script src="/js/monaco-hover-utils.js" type="text/javascript"></script>
 <script>
 
   require.config({ paths: { 'vs': '/min/vs' }});
@@ -203,167 +204,41 @@ title:  'Welcome'
     monaco.editor.setTheme('amlTheme');
 
     var dialectEditor = monaco.editor.create(document.getElementById('container'), {
-      value: [
-        '#%Dialect 1.0',
-        '',
-        'dialect: Kubernetes Pod',
-        'version: 1.0',
-        '',
-        'external:',
-        '  schema-org: http://schema.org/',
-        '',
-        'documents:',
-        '  root:',
-        '    encodes: DescriptionDataNode',
-        '',
-        'nodeMappings:',
-        '  DescriptionDataNode:',
-        '    classTerm: schema-org.APIReference',
-        '    mapping:',
-        '      apiVersion:',
-        '        propertyTerm: schema-org.assemblyVersion',
-        '        range: string',
-        '        mandatory: true',
-        '      kind:',
-        '        propertyTerm: schema-org.name',
-        '        range: string',
-        '        mandatory: true',
-        '      metadata:',
-        '        propertyTerm: schema-org.about',
-        '        range: MetadataNode',
-        '        mandatory: true',
-        '      spec:',
-        '        propertyTerm: schema-org.mainEntity',
-        '        range: SpecNode',
-        '        mandatory: true',
-        '',
-        '  MetadataNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      name:',
-        '        propertyTerm: schema-org.name',
-        '        range: string # Try making it a "number"',
-        '        mandatory: true',
-        '',
-        '  SpecNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      restartPolicy: # Try removing this property block',
-        '        propertyTerm: schema-org.description',
-        '        range: string',
-        '        mandatory: true',
-        '      volumes:',
-        '        propertyTerm: schema-org.about',
-        '        range: VolumeNode',
-        '        allowMultiple: true',
-        '      containers:',
-        '        propertyTerm: schema-org.mainEntity',
-        '        range: ContainerNode',
-        '        allowMultiple: true',
-        '',
-        '  VolumeNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      name:',
-        '        propertyTerm: schema-org.name',
-        '        range: string',
-        '        mandatory: true',
-        '      emptyDir:',
-        '        propertyTerm: schema-org.desctiption',
-        '        range: EmptydirNode',
-        '        mandatory: true',
-        '',
-        '  EmptydirNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      medium:',
-        '        propertyTerm: schema-org.name',
-        '        range: string',
-        '',
-        '  ContainerNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      name:',
-        '        propertyTerm: schema-org.name',
-        '        range: string',
-        '        mandatory: true',
-        '      image:',
-        '        propertyTerm: schema-org.description',
-        '        range: string',
-        '        mandatory: true',
-        '      volumeMounts:',
-        '        propertyTerm: schema-org.about',
-        '        range: MountNode',
-        '        allowMultiple: true',
-        '        mandatory: true',
-        '      command:',
-        '        propertyTerm: schema-org.text',
-        '        range: string',
-        '        allowMultiple: true',
-        '      args:',
-        '        propertyTerm: schema-org.text',
-        '        range: string',
-        '        allowMultiple: true',
-        '',
-        '  MountNode:',
-        '    classTerm: schema-org.Intangible',
-        '    mapping:',
-        '      name:',
-        '        propertyTerm: schema-org.name',
-        '        range: string',
-        '        mandatory: true',
-        '      mountPath:',
-        '        propertyTerm: schema-org.text',
-        '        range: string',
-        '        mandatory: true'
-      ].join('\n'),
+      value: '',
       language: 'raml',
       scrollBeyondLastLine: false,
+      renderLineHighlight: "none",
       minimap: {
           enabled: false
       }
     });
+    dialectEditor.getModel().updateOptions({ tabSize: 2 });
+
     var documentEditor = monaco.editor.create(document.getElementById('container-1'), {
-      value: [
-        '#%Kubernetes Pod 1.0',
-        '',
-        'apiVersion: v1',
-        'kind: Pod',
-        'metadata:',
-        '  name: two-containers # Try making this an integer',
-        '',
-        'spec:',
-        '  restartPolicy: never # Try deleting this line',
-        '  volumes:',
-        '    - name: shared-data',
-        '      emptyDir: {}',
-        '    - name: private-data',
-        '      emptyDir:',
-        '        medium: first-container',
-        '  containers:',
-        '    - name: nginx-container',
-        '      image: nginx',
-        '      volumeMounts:',
-        '        - name: shared-data',
-        '          mountPath: /usr/share/nginx/html',
-        '    - name: debian-container',
-        '      image: debian',
-        '      volumeMounts:',
-        '        - name: shared-data',
-        '          mountPath: /pod-data',
-        '        - name: private-data',
-        '          mountPath: /pod-private-data',
-        '      command: ["/bin/sh"]',
-        '      args: ["-c", "echo Hello > /pod-data/index.html"]'
-      ].join('\n'),
+      value: '',
       language: 'raml',
       scrollBeyondLastLine: false,
+      renderLineHighlight: "none",
       minimap: {
           enabled: false
       }
+    });
+    documentEditor.getModel().updateOptions({ tabSize: 2 });
+
+    hoverUtils.loadLanguages('json', 'xml', 'yaml')
+    monaco.languages.registerHoverProvider('raml', {
+      provideHover: (m, p) => hoverUtils.provideHover(m, p)
+    });
+    monaco.languages.registerLinkProvider('raml', {
+      provideLinks: (m, t) => hoverUtils.provideLinks(m, t)
     });
 
-    const PLAYGROUND_URL = 'https://a.ml/playground/validation.html';
+    hoverUtils.fetchText('examples/dialect.yaml')
+      .then(text => dialectEditor.getModel().setValue(text))
+    hoverUtils.fetchText('examples/document.yaml')
+      .then(text => documentEditor.getModel().setValue(text))
+
+    const PLAYGROUND_URL = 'https://a.ml/playground/starter_guide.html';
     const buttons = document.getElementsByClassName('try-it-out-btn');
     Array.from(buttons).forEach((btn) => {
       btn.onclick = () => {
