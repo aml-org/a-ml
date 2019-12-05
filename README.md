@@ -9,7 +9,7 @@
 
   Enter directory:
   ```
-  $ cd raml-org
+  $ cd a-ml
   ```
 
   Install all dependencies:
