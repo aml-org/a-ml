@@ -12,9 +12,6 @@ const hoverUtils = {
     [/^apiVersion:/, 'This is apiVersion']
   ],
 
-  // Monaco editor decorations
-  decorations: [],
-
   /**
    * Loads languages to make syntax highlighting work in tooltips.
    * https://github.com/microsoft/monaco-editor/issues/812#issuecomment-380709445
@@ -50,19 +47,11 @@ const hoverUtils = {
         blockStartLineNum, model.getLineMinColumn(blockStartLineNum),
         blockEndLineNum, model.getLineMaxColumn(blockEndLineNum)
       )
-      this.decorations = model.deltaDecorations(this.decorations, [
-        {
-          range: range,
-          options: {
-            linesDecorationsClassName: 'selected-line-editor-decoration',
-            isWholeLine: true
-          }
-        }
-      ])
       return {
         contents: [
           { value: descVal }
-        ]
+        ],
+        range: range
       }
     })
   },
