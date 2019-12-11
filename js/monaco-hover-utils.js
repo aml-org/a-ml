@@ -2,14 +2,37 @@ const hoverUtils = {
 
   // Generic description returned when no description for parent block
   // is found or root elements like "title:" are hovered over.
-  genericDesc: 'TODO',
+  genericDesc: 'AML Dialect defines a set of constraints over a RDF data-model composed by a graph of nodes connected by properties.',
 
   // Pairs of [regex, desc] where:
   //   regex: regular expression to match line content against;
   //   desc: description to display in a tooltip if line content matches regexp.
   descRegexps: [
-    [/^dialect:/, 'This is dialect'],
-    [/^apiVersion:/, 'This is apiVersion']
+    [/^dialect:/, 'Dialect name. This information will be used to define the required declaration header for the document instances of the new dialect.'],
+    [/^version:/, 'Dialect version. This information will be used to define the required declaration header for the document instances of the new dialect.'],
+    [/^uses:/, 'The uses property can establish a mapping from vocabulary terms to the structure of a graph of data nodes by importing vocabularies in the dialect document.'],
+    [/^external:/, 'In the definition of a dialect, the external property can also explicitly reference external vocabularies, as defined in the AML Vocabulary spec.'],
+    [/^nodeMappings:/, 'The property nodeMappings introduces the declaration of all the nodes in the model. The nodes describe the mapping of vocabulary terms to the type of the node and its properties, as well as the constraints associated with each node.'],
+    [/^classTerm:/, 'The type of each node must be defined by the classTerm property.'],
+    [/^mapping:/, 'Each node has an associated mapping of node properties, defined by a label and a property mapping definition.'],
+    [/^range:/, 'Allowed data type for the objects of the property.'],
+    [/^mandatory:/, 'The property must be present in the node, default false.'],
+    [/^pattern:/, 'A regular expression that must match the value of the property.'],
+    [/^minimum:/, 'Minimum value for the property.'],
+    [/^maximum:/, 'Maximum value for the property.'],
+    [/^enum:/, 'Closed set of values this property value must belong to.'],
+    [/^allowMultiple:/, 'Multiple objects can be used in the value of this property, default false.'],
+    [/^sorted:/, 'Indicates that the values of the property must be stored preserving the declaration order.'],
+    [/^mapKey:/, 'Property used to declare a connection in the document instance by value of nested property or by a tuple property key and property value.'],
+    [/^typeDiscriminator:/, 'Mapping from values to vocabulary classes used to disambiguate the type of node.'],
+    [/^typeDiscriminatorName:/, 'Name of the property used to declare the value of the discriminator.'],
+    [/^propertyTerm:/, 'Property mappings can map literal propertyTerms from a vocabulary to scalar values in properties of the AST nodes in the document instance.'],
+    [/^documents:/, 'The mapping in a dialect is achieved through the documents property. The value of this property is a mapping with 3 possible keys: root, module, fragments.'],
+    [/^root:/, 'Nodes that can be declared and encoded in the root document for the dialect.'],
+    [/^module:/, 'Nodes that can be declared in a library for the dialect.'],
+    [/^fragments:/, 'Nodes that can be encoded into fragments for the dialect.'],
+    [/^encodes:/, 'Main node mapping that will be encoded at the root level of the dialect document.'],
+    [/^declares:/, 'Mapping from declaration key to the type of nodes that can be declared for that key.']
   ],
 
   /**
