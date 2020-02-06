@@ -694,6 +694,18 @@ header{
       }
     }
   }
+  button#ot-sdk-btn {
+    background: none;
+    border: 0px;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 10px 9px;
+    font-weight: 500;
+    color: #526881;
+    font-family: "Roboto-Medium";
+     background-color: white;
+     cursor: pointer;
+    }
   .navbar-brand{
     padding: 0;
     height: auto;
