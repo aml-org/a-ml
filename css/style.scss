@@ -706,6 +706,9 @@ header{
      background-color: white;
      cursor: pointer;
     }
+    button#ot-sdk-btn:focus {
+    outline: 0px !important;
+    }
   .navbar-brand{
     padding: 0;
     height: auto;
