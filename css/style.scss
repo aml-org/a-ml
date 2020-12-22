@@ -378,11 +378,21 @@ header{
   }
 }
 
-.aml-editor{
+.aml-editors-container {
   position: relative;
 
+  .aml-editors-container-inner {
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #d3d5d9;
+    border-style: solid;
+    width: 90%;
+    margin: auto;
+    overflow: hidden;
+  }
+
   h2{
-    font-family: 'Roboto-Regular';background-color: $ghost-white;box-shadow: 0 -1px 0 0 #DBE8FD;  font-size: $font-face-small;  font-weight: 500; line-height: 16px;margin:0;padding: 20px;width: 100%;
+    font-family: 'Roboto-Regular';background-color: $ghost-white; font-size: $font-face-small;  font-weight: 500; line-height: 16px;margin:0;padding: 20px;width: 100%;
   }
   .editor-1{
     h3{
@@ -401,31 +411,28 @@ header{
     }
   }
   a.playground-btn{
-    z-index: 1;
-    position: absolute;
-    right: 15px;
-    top: 60px;
+    width: 220px;
+    max-width: 220px;
+    height: 55px;
+    padding: 0;
+    margin: auto;
+    margin-top: 20px;
     border: 0px;
-    border-radius: 2px;
-    padding:10px 20px;
-    background-color: #9EAAB7;
+    border-radius: 3px;
+    border-color: $royal-blue;
+    background-color: $royal-blue;
     color: $white;
-    font-family: 'Roboto-Regular';
-    font-size: $font-face-small;
-    font-weight: 600;
-    letter-spacing: 0.44px;
-    line-height: 16px;
+    font-family: $font-face-medium;
+    font-size: $font-h3;
+    letter-spacing: 0.5px;
+    line-height: 55px;
     text-align: center;
   }
-  a.playground-btn.no-background{
-    background:none;
-    color:$black;
-    font-size:20px;
-    top:4px;
+  a.playground-btn:hover {
+    background-color: $royal-blue-hover;
   }
   .editor-block{
     display: flow-root;
-    box-shadow: 1px 0px 3px #808080;
     .monaco-editor{
       .monaco-editor-hover{
         background-color: $light-slate-gray !important;
@@ -694,6 +701,21 @@ header{
       }
     }
   }
+  button#ot-sdk-btn {
+    background: none;
+    border: 0px;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 10px 9px;
+    font-weight: 500;
+    color: #526881;
+    font-family: "Roboto-Medium";
+     background-color: white;
+     cursor: pointer;
+    }
+    button#ot-sdk-btn:focus {
+    outline: 0px !important;
+    }
   .navbar-brand{
     padding: 0;
     height: auto;
