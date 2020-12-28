@@ -1,0 +1,40 @@
+---
+id: custom_validation_code
+title: Custom validations code examples
+hide_title: true
+---
+# Custom validations code examples
+
+AMF can be used to validate parsed AML models with custom validation profiles.
+Before using the custom validation, a Validation Profile valid document instance must be registered using the `loadValidationProfile` function.
+
+The name of the validation profile must be passed to the `validate` function for the custom validations to be applied
+
+## Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+        ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/master/src/main/java/aml_org/examples/CustomValidation.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/master/src/main/js/CustomValidation.js'
+    />
+</TabItem>
+</Tabs>
