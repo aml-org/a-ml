@@ -1,3 +1,4 @@
-/aml-spec,/aml-spec/vocabularies/
-/amf-playground,/amf-playground/vocabularies.html
-/docbook,/docbook/
+/aml-spec,http://aml-org.github.io/aml-spec/vocabularies/
+/amf-playground,http://aml-org.github.io/amf-playground/vocabularies.html
+/docbook,/docs/aml/
+/docs,/docs/aml/
