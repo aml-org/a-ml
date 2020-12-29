@@ -2,7 +2,7 @@ module.exports = {
     title: 'AML',
     tagline: 'Standards and tools to define, parse and link metadata',
     url: 'https://aml-org.github.io',
-    baseUrl: '/amf-documentation/',
+    baseUrl: '/',
     organizationName: 'aml-org',
     projectName: 'amf-documentation',
     scripts: [
@@ -26,7 +26,8 @@ module.exports = {
                 },
                 theme: {
                     customCss: '../src/css/custom.scss'
-                }
+                },
+                blog: false
             }
         ]
     ],
