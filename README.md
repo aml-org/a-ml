@@ -10,27 +10,17 @@
 
     ```bash
     $ git clone https://github.com/aml-org/a-ml
-    $ gh repo clone aml-org/a-ml #using github CLI
     ```
 
-2. Go to `website` folder and run `npm start` or `yarn start`:
+2. In the root folder run `npm run preview` to preview the website live:
 
     ```bash
-    $ cd website
-    $ npm start
+    $ npm run preview
     ```
 
-3. The server should be up and the website available in http://localhost:3000/:
+3. The server should be up and the website available in http://localhost:3000/.
 
-    ```bash
-    $ npm start 
-    
-    > @ start /Users/user/dev/a-ml/website
-    > docusaurus-start
-   
-    Starting the development server...
-    Docusaurus website is running at: http://localhost:3000/
-    ```
+4. If you want to build the static website and serve it, run `npm run build` instead.
 
 ## Contribution
 AML's website is in fact an open source project and your contribution is very much appreciated. 
