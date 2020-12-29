@@ -1,4 +1,5 @@
 /aml-spec,http://aml-org.github.io/aml-spec/vocabularies/
-/amf-playground,http://aml-org.github.io/amf-playground/vocabularies.html
+/amf-playground,http://aml-org.github.io/amf-playground/validation.html
+/playground/validation.html,http://aml-org.github.io/amf-playground/validation.html
 /docbook,/docs/aml/
 /docs,/docs/aml/
