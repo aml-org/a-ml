@@ -8,4 +8,5 @@ COPY ./docs /app/docs
 COPY ./website /app/website
 RUN yarn install
 
-CMD ["yarn", "start"]
+CMD ["yarn", "build"]
+CMD ["yarn", "serve"]
