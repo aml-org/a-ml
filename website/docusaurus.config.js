@@ -22,7 +22,7 @@ module.exports = {
                     showLastUpdateAuthor: true,
                     showLastUpdateTime: true,
                     path: '../docs',
-                    sidebarPath: './sidebars.json'
+                    sidebarPath: './sidebars.js'
                 },
                 theme: {
                     customCss: '../src/css/custom.scss'
@@ -51,7 +51,7 @@ module.exports = {
                     position: 'left'
                 },
                 {
-                    to: 'docs/amf',
+                    to: 'docs/AMF/amf_intro',
                     label: 'AMF',
                     position: 'left'
                 },
