@@ -1,0 +1,39 @@
+---
+id: resolution_code
+title: Resolution
+hide_title: true
+---
+# Resolution
+
+AMF can be used to resolve parsed AML models. The generic resolution logic is available in the class `Resolver`.
+
+The type of model to be resolved must be passed as an argument to the constructor. For any AML Dialect, `"AML 1.0"` must be passed as the argument.
+
+## Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/master/src/main/java/aml_org/examples/Resolving.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/master/src/main/js/Resolving.js'
+    />
+</TabItem>
+</Tabs>

@@ -1,0 +1,39 @@
+---
+id: validation_code
+title: Validation
+hide_title: true
+---
+# Validation
+
+AMF can be used to validate parsed AML models. The validator is accessible through the `validate` method in the main AMF model.
+
+The name of any loaded AML dialect can be used as the validation profile name used to validate the model.
+
+## Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/master/src/main/java/aml_org/examples/Validating.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/master/src/main/js/Validating.js'
+    />
+</TabItem>
+</Tabs>
