@@ -106,13 +106,6 @@ function Home() {
                 </section>
                 <section>
                     <div className="container">
-                        {/*<div className='row'>*/}
-                        {/*    <div className='col'>*/}
-                        {/*        <h2 className='text--center' style={{ fontSize: '2.5rem' }}>*/}
-                        {/*            See it in action*/}
-                        {/*        </h2>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                         <div className='row'>
                             <div className='col col--6'>
                                 <div className='code'>

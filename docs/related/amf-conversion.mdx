@@ -1,9 +1,193 @@
 ---
 id: amf_conversion
 title: AMF Conversion
-hide_title: true
 ---
 
-# AMF Conversion
+:::caution
+The behaviour expressed in this documentation is currently a work in progress.
+If any bugs are found that do not satisfy these requirements,
+please file an issue in the [aml-org/amf repository](https://github.com/aml-org/amf/pull/715).
+:::
+
+# What is WebAPIs conversion?
+
+Conversion stands for the capability of parsing an API from one specification vendor into an API graph and then rendering said graph as a different vendor’s specification.
+
+Different specifications can have different required fields, and the same information conceptually may not be described in the same way.
+This is the reason why in a *cross parsing-rendering process*, the AMF graph needs to go through a transformation called *“Compatibility resolution”*.
+
+**Compatibility resolution** is a specific resolution pipeline that is used to adapt an API graph parsed from spec A, to fulfill the requirements of the spec in which it will be rendered.
+An example of how to use Compatibility Resolution can be seen in [Example 1](#conversion-examples).
 
 
+How does this impact the API model? For example, fields that are not required in the origin spec but required in the target spec,
+will be added with default values if they are not present in the origin spec.
+
+:::tip The Objective
+The objective of conversion is to **output a valid AMF model for the spec in which it will be rendered**.
+It aims to **keep information loss to a minimum through a best-effort process** with some limitations.
+:::
+
+
+## Conversion Goals
+
+Conversion resolution has several goals:
+- Make transitioning to/from OAS to RAML easier for the end user.
+- Give the user an approximate view of what his API in another spec would look like
+- Let tools use specs that they don’t directly support
+- Take advantage of spec-specific tooling
+    - for example, converting to OAS to use swagger-ui in a microservice or using a trusted client-spec generator that only works with RAML.
+
+
+
+# Conversion limitations
+The AMF team, having listened to other team’s needs, is the one that dictates how the model is adapted to fit other specs:
+- If there is 1:1 information type mapping between specs it will be converted.
+- If there are missing mandatory fields default value will be added. The default’s value is opinionated.
+- Anything else is omitted.
+
+
+### Concepts present in a spec but nonexistent in another aren’t supported
+Sometimes a spec may introduce concepts that don’t exist in other specs. There are many cases coming from Raml to Oas, some are:
+- Datatype Fragments
+- Libraries
+- Resource Types and Traits
+- Overlays and Extensions
+
+These document types and objects cannot be converted to Oas as these constructs do not exist in that spec.
+These constructs can be migrated to Oas if and only if they are referenced from a root Api document.
+
+
+### Not all specs are supported
+
+This is a direct consequence of the previous limitation, not all specs can be converted between each other. Currently, Async API is not supported for conversion.
+It’s event-led concepts don’t have a direct correspondence to REST concepts described in RAML or OAS.
+For example, how would an Async APIs “subscribe” or “binding” be in RAML? The amount of similar concepts is simply not enough to create similar graphs.
+Supported conversions are:
+- RAML 1.0 to OAS 2.0 and vice-versa
+- RAML 1.0 to OAS 3.0 and vice-versa
+
+
+### Information may be lost
+Original information that is incompatible with the target spec may be lost. This is also a consequence of the first limitation.
+For example OAS 3 links have no way of being migrated into RAML and will not be rendered in the converted RAML spec.
+
+In the next example, not all of the RAML  `documentation` nodes can be migrated to OAS 3.0 `externalDocs` nodes.
+In fact, only the first `documentation` node is kept while the others are lost.
+As the RAML 1.0 `documentation` does not define an url like OAS 3.0’s does, an url node is defined with an “empty” url.
+
+
+
+```yaml title="RAML to OAS 3.0 documentation conversion example - RAML code"
+documentation:
+    - title: Test Console and Mocking Service
+    content: |
+        Welcome to the \_Test API\_ Documentation. The \_Test API\_
+        allows you to test console and mocking service features
+        [integration libraries](https://mulesoft.com)
+    - title: Legal
+    content: !include docs/api.md
+```
+
+```yaml title="RAML to OAS 3.0 documentation conversion example - OAS code"
+externalDocs:
+    url: http://
+    description: |
+        Welcome to the \_Test API\_ Documentation. The \_Test API\_
+        allows you to test console and mocking service features
+        [integration libraries](https://mulesoft.com)
+```
+
+### Conversion is not customizable
+
+Default conversion resolution is not customizable as each spec conversion is implemented as a *ResolutionPipeline* and currently pipelines are not modifiable.
+We know and understand that the same API can be modeled in different ways following different practices, but it's not possible to cover them all.
+
+A different conversion resolution can be implemented by creating a new *ResolutionPipeline* with the required conversion stages.
+
+
+### Round-trip conversions
+
+When AMF adapts a model graph to be able to render it in another spec, it knows from which spec the model was parsed (spec A) and to which spec the model will be rendered (spec B).
+After the model is rendered that knowledge is lost as that file is just another API from spec B.
+This context loss makes it impossible to convert back again from spec B to spec A and expect exactly the same content.
+
+Previously, AMF attempted to reduce this information lost in conversion by rendering constructs that could only be parsed by them.
+This was often done with special API constructs given by the specs and recognized by AMF:
+- [*annotations*](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md#annotations) in RAML, written as `amf-.*`.
+- [*specification extensions*](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#specification-extensions) in OpenApi, written as `x-amf-.*`.
+
+These attempts to keep as much information possible have two main drawbacks:
+- AMF can’t know whether some content in the rendered spec, like annotations, was rendered for compatibility purposes, or it is something that a spec author wanted to have in the spec.
+- All recognizable attributes that AMF can write in the spec to identify it as coming from a compatibility context can be emulated by a spec designer with a modeling intention and are therefore invalid as conversion identifiers.
+
+
+# Common Questions
+
+### Why don’t we use annotations to render incompatible content?
+Incompatible content isn’t rendered in an annotation because it goes against one of the goals of conversion: take advantage of tooling in a specific spec.
+Annotation-rendered incompatible content will not be processed by tooling with the intent it was added to the spec, thus rendering that content useless.
+
+### Why have some items in the spec lost their relative order?
+AMF doesn’t guarantee that items keep their relative order. The framework does a best-effort of keeping order by reusing the spec’s lexical information.
+API resolution may sometimes make that lexical information useless or meaningless due to several operations that it performs.
+This is significant especially in conversion where fields may be added, removed or transformed.
+
+Why doesn’t AMF guarantee relative order? AMF’s underlying model is a directed cyclic graph.
+In a graph, outgoing edges from a vertex aren’t ordered relatively as the only thing that matters is where those edges go, not how they are ordered. The same applies to AMF’s model.
+
+### Can I parse and render my API from a spec to the same one?
+You shouldn’t resolve the model with a compatibility pipeline as these pipelines are just to move between different specifications.
+
+To render to the same specification you shouldn’t apply a resolution unless you want the model to also be resolved (apply traits, resource types, apply inheritance and links, solve parameters, etc).
+
+Although you can cycle (parse and render) your API using AMF you should reconsider why you are doing it and see if the framework has the capabilities of achieving what you seek in a different, more useful way.
+
+### Why do I have to use conversion resolution? Can’t Renderers know how to render correctly?
+Rendering has to render any model that is passed to the Renderers, it can’t modify said model.
+This is why conversion is done in a resolution stage (using a specific pipeline for compatibility), it is the only place where the model can be transformed before rendering.
+
+
+# Conversion Examples
+```java title="Example 1. Conversion from RAML 1.0 to OAS 2.0 (Java)"
+AMF.init().get();
+BaseUnit ramlApi = new RamlParser().parseFileAsync("<your-converted-api-file-path>").get();
+Resolver resolver = new Oas20Resolver();
+BaseUnit convertedOasApi = resolver.resolve(ramlApi, ResolutionPipeline.COMPATIBILITY_PIPELINE());
+Renderer renderer = new Oas20Renderer();
+renderer.generateFile(convertedOasApi, "<your-converted-api-file-path>").get();
+```
+
+```java title="Example 2. Custom ResolutionPipeline creation (Java)"
+class MyOas20ConversionPipeline extends ResolutionPipeline {
+  public MyOas20ConversionPipeline(ErrorHandler eh) {
+    super(eh);
+  }
+
+  @Override
+  public ProfileName profileName() {
+    return Oas20Profile$.MODULE$;
+  }
+
+
+  @Override
+  public Seq<ResolutionStage> steps() {
+    List<ResolutionStage> stages = new ArrayList<>();
+    stages.add(new MyCustomStage(this.eh()));
+    return JavaConverters.asScalaBuffer(stages);
+  }
+}
+
+public class MyCustomStage extends ResolutionStage {
+
+    public MyCustomStage(ErrorHandler errorHandler) {
+        super(errorHandler);
+    }
+
+    @Override
+    public <T extends BaseUnit> T resolve(T model) {
+        return model;
+    }
+}
+
+```

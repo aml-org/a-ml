@@ -22,6 +22,11 @@ module.exports = {
             'aml',
             'aml_spec',
             'aml_validation_model'
+        ],
+        'Related Docs': [
+            'related/amf_conversion',
+            'related/async_raml_datatypes',
+            'related/json_schema_draft_2019_09_to_draft_7'
         ]
     }
 };

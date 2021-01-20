@@ -1,0 +1,324 @@
+---
+id: async_raml_datatypes
+title: Async + RAML Data Types in AMF
+---
+
+:::info Technical Document
+This is a technical document, this information is intended for experienced users
+:::
+
+Within the Async specification it is possible to use raml data types to define a payload, taking into account that the schema format is specified accordingly.
+Both specifications have their own distinct referencing and modularization mechanisms, and it is not clear where to draw the line to determine where one specification stops, and the other one starts.
+This document will describe how to use RAML types in Async when using AMF.
+
+
+## Referencing external RAML content using ‘$ref’
+In order to support referencing raml content in external files, AMF allows the use of the `$ref` mechanism present in Async but with clear restrictions.
+This enables referencing data type fragments, data types present in libraries, as well as any raml content present in yaml or json files.
+
+Given that the payload content must comply with RAML, **the ‘$ref’ may only be used at the root of the payload definition as an exception to this rule**.
+Its target content must be valid structurally according to the relevant RAML specification:
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="‘$ref’ at root of payload (Valid)"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+  $ref: “...” # must reference raml content
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="‘$ref’ nested within raml content (Invalid)" {6}
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ type: object
+ properties:
+   user:
+     $ref: “...” # '$ref' is not valid in RAML
+```
+
+</div>
+</div>
+</div>
+
+
+The following section shows all supported use cases when using this referencing mechanism, adding additional comments if necessary.
+
+
+
+### Reference to data type fragments
+The data type fragment must be self-contained, meaning it cannot depend on any definition made in the root api. The following example is **valid** for this use case.
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ $ref: external-data-type.raml
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="RAML data type fragment (external-data-type.raml)"
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  a: string | object
+```
+
+</div>
+</div>
+</div>
+
+The following referenced data type is **invalid** as it is not self-contained, meaning the data type fragment depends on type definitions which will not be resolved in the root api.
+Due to known limitations this api will not return validations, but the reference to the type Other will not be made.
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+components:
+ schemas:
+   Other: ...
+channels:
+ users/signup:
+   subscribe:
+     message:
+       schemaFormat: application/raml+yaml;version=1.0
+       payload:
+        $ref: external-data-type.raml
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="RAML data type fragment (external-data-type.raml)" {5}
+#%RAML 1.0 DataType
+
+type: object
+properties:
+ a: Other
+```
+
+</div>
+</div>
+</div>
+
+
+Use of relative pointers to nested content within the data type fragment is not supported, like in the following **invalid** example:
+```yaml {3}
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ $ref: external-data-type.raml#/properties/a
+```
+
+
+
+### Reference to types in library fragments
+For the case of libraries, type definitions can be referenced using the following fixed pointer: `{lib}#/types/{typeName}`.
+When referencing types defined in a library, the included content will have context of other type definitions present in the original library.
+This can be seen in the following **valid** example where the type User references another type present in the external library.
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+  $ref: ../external-library.raml#/types/User
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="RAML library fragment (external-library.raml)"
+#%RAML 1.0 Library
+
+types:
+ User:
+   type: Other | string
+
+ Other:
+   type: string
+```
+
+</div>
+</div>
+</div>
+
+**The external library must be self-contained**, meaning it cannot depend on types defined in the root api.
+In the following **invalid** example, the library depends on the definition of the type Other, which will not be resolved from the definitions present in the main api.
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+components:
+ schemas:
+   Other: ...
+channels:
+ users/signup:
+   subscribe:
+     message:
+       schemaFormat: application/raml+yaml;version=1.0
+       payload:
+        $ref: ../external-library.raml#/types/User
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="RAML library fragment (external-library.raml)" {5}
+#%RAML 1.0 Library
+
+types:
+ User:
+   type: Other | string
+```
+
+</div>
+</div>
+</div>
+
+
+
+### Reference to external yaml/json files
+When referencing external yaml or json files, the `$ref` inlines the content.
+Relative json pointers can be used to reference content that is nested within the file, but taking into account the following limitation:
+
+:::caution When referencing to external yaml/json files
+the external file **must not** be a known RAML fragment or api specification.
+:::
+
+The following case is a **valid** reference making use of relative json pointers.
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ $ref: external-yaml.yaml#/definitions/User
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Yaml file (external-yaml.yaml)"
+definitions:
+ User:
+   type: string | object
+```
+
+</div>
+</div>
+</div>
+
+As previously mentioned, when the target file is a known raml fragment or api specification free use of relative json pointers is not supported.
+The following example shows an **invalid** example when using relative json pointer to reference an external RAML specification:
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Async api"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ $ref: ../api.raml#/types/User
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="External RAML api (api.raml)" {1}
+#%RAML 1.0
+title: Instagram API
+
+types:
+ User:
+   type: object
+```
+
+</div>
+</div>
+</div>
+
+
+
+## Inlined RAML types
+The simplest way to define a raml type in Async is by defining your content inlined under the `payload` facet while using the appropriate schema format like so:
+```yaml
+schemaFormat: application/raml+yaml;version=1.0
+payload: # The following is a RAML data type
+ type: object
+ properties:
+   a: object | string
+ additionalProperties: false
+```
+**All content within the payload will be considered strictly RAML**, except when using ‘$ref’ at the root of the payload (see the [previous section](#referencing-external-raml-content-using-ref) for more details).
+
+
+### Isolated RAML context
+When defining inlined types, its context is fully restricted from the content defined outside the payload facet.
+This means that any reference to content defined in the `components` facet of the main Async api will not be resolved.
+
+```yaml title="Referencing types defined in async api components (invalid)" {10}
+components:
+ schemas:
+   User: ...
+channels:
+ users/signup:
+   subscribe:
+     message:
+       schemaFormat: application/raml+yaml;version=1.0
+       payload:
+         type: User #unresolved reference
+```
+
+
+### Limited RAML referencing mechanism
+RAML has its own referencing mechanism to include content from external files using a reserved yaml tag `!include`.
+**AMF will only support referencing external data type fragments when using this mechanism.** This feature will be limited to Async apis defined in yaml format, as json has no way of defining tags.
+As this syntax is valid within a RAML context, including data types fragments can be made at the root of the payload content, or nested within other inlined content:
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Using include at root of payload"
+schemaFormat: application/raml+yaml;version=1.0
+payload: !include external-data-type.raml
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="Using include within inlined content"
+schemaFormat: application/raml+yaml;version=1.0
+payload:
+ type: object
+ properties:
+   id: string
+   user: !include external-data-type.raml
+```
+
+</div>
+</div>
+</div>
+
