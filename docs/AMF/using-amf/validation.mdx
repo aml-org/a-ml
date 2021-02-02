@@ -1,0 +1,53 @@
+---
+id: amf_validation
+title: Validation
+---
+
+To validate a model means checking if it complies with the constraints defined for it. In case it doesn't comply,
+pinpoint where and how the model is invalid, and what severity this issue has.
+
+Once the model has been parsed and resolved, AMF can apply two kinds of validations:
+- **WebApi validations**
+    - These are programmatic constraints that are validated against the WebApi model
+    - There are general validations as well as others specific to every API Specification AMF supports
+- **SHACL validations**
+    - [SHACL](https://www.w3.org/TR/shacl) (Shapes Constraint Language) is a language designed to declare certain
+    conditions that can be validated against [RDF graphs](https://en.wikipedia.org/wiki/Resource_Description_Framework) like the AMF Graph
+    - Used mainly to validate AML Dialect Instances
+
+
+The following figure explains the AMF Validation process:
+
+![Validation Graph](../../assets/images/amf/validation-graph.png)
+
+
+## Validation Examples
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/ValidationTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/validation.test.js'
+    />
+</TabItem>
+</Tabs>
+
+
+The final feature in the AMF repertoire is emission, and you'll learn about it in the next section.

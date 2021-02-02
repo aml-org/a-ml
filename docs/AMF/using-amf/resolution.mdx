@@ -1,0 +1,59 @@
+---
+id: amf_resolution
+title: Resolution
+---
+
+Resolution is the process of applying multiple transformations to the AMF Graph model. The complete resolution pipeline has the following steps:
+
+![resolution pipeline](../../assets/images/amf/resolution-pipeline.png)
+
+The most common use case of resolution is to flatten and simplify the model by:
+- Resolving links and inheritances
+- Applying traits and resourceTypes (in the case of RAML)
+- Normalization of shapes and parameters
+
+Another use case where resolution is of utmost importance is when making a conversion from one API specification to another.
+For example, when converting a RAML API to OAS, multiple verifications and conversions are made in order to have a valid, OAS-compliant API.
+
+## Pipelines
+There are different types of pipelines that can be used in AMF, depending on the use case for which AMF is being used:
+- **default**
+    - keeps only the parsed graph model, deletes all information no longer relevant like `document.declares`
+- **editing**
+    - keeps all information in already parsed nodes, like the source and the declarations
+    - for usages where someone is editing the API, like an interactive API designer that uses AMF in the background
+- **compatibility**
+    - MUST be used when converting an API to a different Spec
+    - includes additional amf-specific information to aid in cross-specification conversion
+
+
+## Examples
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/ResolutionTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/resolution.test.js'
+    />
+</TabItem>
+</Tabs>
+
+
+In the next section you'll learn how validations can be applied to the resolved model to check its validity and report errors.

@@ -1,0 +1,80 @@
+---
+id: amf_parsing
+title: Parsing with AMF
+---
+
+AMF is capable of parsing things like:
+
+- AML dialects
+- API specifications
+  - RAML
+  - OAS 2 & 3
+  - AsyncAPI 2.0
+
+In this section you'll learn how to parse each one of them, followed by practical examples.
+
+
+## Parsing Basics
+Let's cover what a parser does. Parsing is the process of analyzing text made of a sequence of tokens, and then building a data structure based on those tokens.
+
+AMF uses [SYAML](https://github.com/aml-org/syaml) to read JSON or YAML files and generate [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (abstract syntax tree)
+from them, which is later used to generate a graph that represents the model. This can either be a WebApi model (represents an API, independent of its specification),
+or an AML Document model (Dialect, Vocabulary or Dialect Instance).
+
+The returned object obtained from parsing is always a [BaseUnit](https://github.com/aml-org/amf/blob/develop/documentation/model.md#baseunit). There are several Objects that are BaseUnits,
+and depending on the file parsed, the actual object returned can be a [Fragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#fragment), a [Module](https://github.com/aml-org/amf/blob/develop/documentation/model.md#module),
+a [Document](https://github.com/aml-org/amf/blob/develop/documentation/model.md#document) or many others, depending on the content in the source file.
+For more in-depth model information check the [AMF Model](https://github.com/aml-org/amf/blob/develop/documentation/model.md) resource.
+
+The following figure shows the parsing process:
+
+![parsing graph](../../assets/images/amf/parsing-graph.png)
+
+
+- SYAML is used to generate an AST from a YAML/JSON file.
+- AMF uses this AST to generate a graph representation of the model, called BaseUnit.
+    - This model is going to be used in the following stages of AMF.
+
+## Parsing code examples
+The paths given to the parser must have a specific structure:
+
+Paths in Windows:
+
+-   Absolute: `file:///C:/testing/api.raml`
+-   Relative: `file:///api.raml`
+
+Paths in Mac and Unix:
+
+-   Absolute: `file:///Users/aml/testing/api.raml`
+-   Relative: `file://api.raml`
+
+Also, before parsing an AML dialect instance, the dialect must be registered using the `AMF.registerDialect()` function.
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/ParsingTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/parsing.test.js'
+    />
+</TabItem>
+</Tabs>
+
