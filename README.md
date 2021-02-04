@@ -12,7 +12,7 @@
     $ git clone https://github.com/aml-org/a-ml
     ```
 
-2. In the root folder run `npm run preview` to preview the website live:
+2. In the root folder run `npm run preview` to preview the website livetest:
 
     ```bash
     $ npm run preview
