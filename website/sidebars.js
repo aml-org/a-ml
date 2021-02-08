@@ -10,6 +10,8 @@ module.exports = {
                     'AMF/using-amf/amf_parsing',
                     'AMF/using-amf/amf_resolution',
                     'AMF/using-amf/amf_validation',
+                    'AMF/using-amf/amf_emission',
+                    'AMF/using-amf/amf_model',
                 ]
             }
         ],
