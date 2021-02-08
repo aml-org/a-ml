@@ -1,0 +1,34 @@
+---
+id: amf_initialization
+title: AMF initialization
+---
+
+As you've read in the [Code Setup](project_configuration.mdx#code-setup) of the previous section, the method `AMF.init()` initializes AMF and gets it ready to work.
+In this section you'll learn how it does it, and what are the **different ways of initializing AMF**, depending on your use case.
+
+In a nutshell, the initialization method registers the following plugins:
+- WebApi
+- Vocabularies
+- AMFCustomValidation
+- PayloadValidatorPlugin
+
+Lastly, it initializes the core functionalities of amf by doing `amf.Core.init()`. You can easily see this when you inspect the `AMF.init()` method:
+
+```scala title="AMF.scala"
+def init(executionEnvironment: BaseExecutionEnvironment): ClientFuture[Unit] = {
+    WebApi.register(executionEnvironment)
+    Vocabularies.register()
+    AMFCustomValidation.register()
+    amf.Core.registerPlugin(PayloadValidatorPlugin)
+    amf.Core.init(executionEnvironment)
+}
+```
+
+Knowing this, you can cherry-pick the plugins you need and only use those.For example, let's say you only need to parse and resolve an OAS 3.0 specification.
+For that you only need the WebApi plugin, so you can just do:
+
+```java
+WebApi.register();
+Core.init().get();
+```
+That's exactly what we're doing in the [**parsing**](parsing.mdx) examples coming up next.

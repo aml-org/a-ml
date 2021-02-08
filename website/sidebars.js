@@ -6,6 +6,7 @@ module.exports = {
             {
                 'Using AMF': [
                     'AMF/using-amf/amf_setup',
+                    'AMF/using-amf/amf_initialization',
                     'AMF/using-amf/amf_parsing',
                     'AMF/using-amf/amf_resolution',
                     'AMF/using-amf/amf_validation',

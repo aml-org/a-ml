@@ -4,7 +4,7 @@ module.exports = {
     url: 'https://aml-org.github.io',
     baseUrl: '/',
     organizationName: 'aml-org',
-    projectName: 'amf-documentation',
+    projectName: 'aml-docs',
     scripts: [
         'https://buttons.github.io/buttons.js'
     ],
