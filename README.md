@@ -56,10 +56,11 @@ Edit me...
 ```
 
 ### Adding a new docs page
+If you want to add a document, the process requires a few more steps.
 
-1. Create the doc as a new markdown file in `/docs`, example `docs/newly-created-doc.md`:
+1. Create the doc as a new MDX file in `/docs`, example `docs/newly-created-doc.mdx`:
 
-```md
+```markdown
 ---
 id: newly-created-doc
 title: This Doc Needs To Be Edited
@@ -68,9 +69,9 @@ title: This Doc Needs To Be Edited
 My new content here...
 ```
 
-1. Refer to that doc's ID in an existing sidebar in `website/sidebars.json`:
+1. Refer to that doc's ID in an existing sidebar in `website/sidebars.js`:
 
-``` javascript
+```javascript
 // Add newly-created-doc to the Getting Started category of docs
 {
   "docs": {
