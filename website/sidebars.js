@@ -2,6 +2,7 @@ module.exports = {
     docs: {
         AMF: [
             'AMF/amf_intro',
+            'AMF/amf_support',
             {
                 'Using AMF': ['AMF/using-amf/amf_setup']
             }
