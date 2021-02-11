@@ -11,26 +11,13 @@ module.exports = {
                     'AMF/using-amf/amf_resolution',
                     'AMF/using-amf/amf_validation',
                     'AMF/using-amf/amf_emission',
-                    'AMF/using-amf/amf_model',
+                    'AMF/using-amf/amf_model'
                 ]
             }
         ],
-        // Tutorials: [
-        //     'modularization',
-        //     'custom_validations',
-        //     'queries'
-        // ],
-        // 'Code Samples': [
-        //     'code/parsing_code',
-        //     'code/generation_code',
-        //     'code/validation_code',
-        //     'code/resolution_code',
-        //     'code/custom_validation_code'
-        // ],
         AML: [
-            'aml',
-            'aml_spec',
-            'aml_validation_model'
+            'AML/aml',
+            'AML/aml_spec'
         ],
         'Related Docs': [
             'related/amf_conversion',

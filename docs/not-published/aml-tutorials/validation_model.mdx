@@ -50,7 +50,7 @@ version: 0.3
 
 Will produce the following data graph:
 
-![example1](assets/validation/example_graph1.png)
+** insert graph **
 
 As we can see in the image, the 'title' RAML property has been parsed and mapped to the [schema-org 'name' property](http://schema.org/name) in the parsed model, and the 'version' property has been mapped to the [schema-org 'version' property](http://schema.org/version). At the same time, the main API document located at the root of the document `#/` has been marked as being an [instance of schema-org WebAPI class](https://pending.schema.org/WebAPI).
 
@@ -95,7 +95,7 @@ This section describes the technical details of the AMF validation mechanism. If
 
 The following diagram shows the main components of the validation mechanism in AMF:
 
-![validation arch](assets/validation/validation_arch.png)
+** insert graph **
 
 Validation involves two model graphs:
 
@@ -109,11 +109,11 @@ Generated after parsing a custom or standard validation profile and containing r
 
 The following diagram shows the standard data shapes that can be expressed in SHACL:
 
-![shacl shapes](assets/validation/shacl_diagram.png)
+** insert graph **
 
 Additional shapes can be added to SHACL to define new types of validations. Additionally, SHACL also supports JavaScript constraints that can be defined inline as JavaScript code or collected into validation libraries.
 
-Both graphs, the data graph and the shapes graph, can be serialised using AMF as [JSON-LD](https://www.w3.org/TR/json-ld/) documents containing all the information about the graph.
+Both the data graph and the shapes graph can be serialised using AMF as [JSON-LD](https://www.w3.org/TR/json-ld/) documents containing all the information about the graph.
 
 In order to trigger the validation, both graphs are passed to the standard SHACL 1.0 library that will compute the potential violations according to SHACL semantics and generate a validation report as an output data graph.
 This report can be serialised as a JSON-LD document that can be processed by machines or as a human-friendly textual report.

@@ -80,7 +80,7 @@ function Home() {
                                 'button button--outline button--secondary button--lg',
                                 styles.getStarted,
                             )}
-                            to={useBaseUrl('docs/aml')}>
+                            to={useBaseUrl('docs/AML/aml')}>
                             Documentation
                         </Link>
                         <Link
