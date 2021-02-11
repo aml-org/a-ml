@@ -32,6 +32,11 @@ module.exports = {
         ]
     ],
     themeConfig: {
+        // used for crawling site and generating searching with DocSearch
+        algolia: {
+            apiKey: 'f627767b6ec831d4a1782bf7207f845e',
+            indexName: 'a-ml'
+        },
         prism: {
             additionalLanguages: ['scala', 'java'],
             defaultLanguage: 'java',
