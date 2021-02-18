@@ -20,10 +20,10 @@ AML metadata documents have the following advantages:
 
 ## Defining metadata documents
 
-To define a new type of metadata document, an [AML Dialect](https://aml-org.github.io/aml-spec/dialects/) must be used to map the structure of a YAML/JSON document to a graph of information and overlay the semantics for the nodes in the graph.
+To define a new type of metadata document, an [AML dialect](https://aml-org.github.io/aml-spec/dialects/) must be used to map the structure of a YAML/JSON document to a graph of information and overlay the semantics for the nodes in the graph.
 With that information, an AML processor tool can parse and validate the instances of the metadata document and generate the output graph of information with the defined semantics.
 
-This is a simple example of using the AML Dialect to define a personal information metadata document:
+This is a simple example of using the AML dialect to define a personal information metadata document:
 
 _vcard.yaml_
 
@@ -95,9 +95,9 @@ In this example, the semantics of the information comes from the [Schema.org](ht
 
 AML dialects describing metadata documents can work with any of these existing vocabularies as long as the concepts in the vocabularies can be identified by a URI.
 
-AML also introduces the [AML Vocabulary](https://aml-org.github.io/aml-spec/vocabularies/) specification to describe new semantics that can be re-used across AML dialects.
+AML also introduces the [AML vocabulary](https://aml-org.github.io/aml-spec/vocabularies/) specification to describe new semantics that can be re-used across AML dialects.
 
-For example, we could introduce our own "Personal Information" AML Vocabulary with our own definitions for classes of entities and properties:
+For example, we could introduce our own "Personal Information" AML vocabulary with our own definitions for classes of entities and properties:
 
 _personal_info.yaml_
 
@@ -123,4 +123,4 @@ propertyTerms:
 
 ```
 
-AML Vocabularies can be used in AML Dialect definitions and mixed with external vocabularies.
+AML vocabularies can be used in AML dialect definitions and mixed with external vocabularies.

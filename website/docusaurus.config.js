@@ -4,7 +4,7 @@ module.exports = {
     url: 'https://aml-org.github.io',
     baseUrl: '/',
     organizationName: 'aml-org',
-    projectName: 'amf-documentation',
+    projectName: 'aml-docs',
     scripts: [
         'https://buttons.github.io/buttons.js'
     ],
@@ -51,7 +51,7 @@ module.exports = {
             },
             items: [
                 {
-                    to: 'docs/aml',
+                    to: 'docs/AML/aml',
                     label: 'AML',
                     position: 'left'
                 },
@@ -82,7 +82,7 @@ module.exports = {
                     items: [
                         {
                             label: 'Get Started',
-                            to: '/docs/aml',
+                            to: '/docs/AML/aml',
                         }
                     ],
                 },

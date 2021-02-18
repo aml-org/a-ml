@@ -46,11 +46,11 @@ cp ./amf-X.Y.Z-SNAPSHOT.jar ../examples/amf.jar
 
 ```
 
-## Defining an AML Dialect for a new type of metadata documents
+## Defining an AML dialect for a new type of metadata documents
 
 In this example we will define a new type of metadata document to exchange information about geographical locations.
 
-First, we will define a new type of AML Dialect describing the structure of the document, located in the [examples repository](https://github.com/aml-org/examples) in the file `aml/quickstart/dialects/places.yaml`:
+First, we will define a new type of AML dialect describing the structure of the document, located in the [examples repository](https://github.com/aml-org/examples) in the file `aml/quickstart/dialects/places.yaml`:
 
 _places.yaml_
 
@@ -85,7 +85,7 @@ documents:
 
 The dialect is very simple. It just defines a document with a couple of nodes: one for the place, and the other for an image of the place. We are using the [Schema.org](http://schema.org) vocabulary to provide the semantics of the metadata.
 
-You can check the validity of this AML Dialect using AMF. From the top-level directory of the [examples repository](https://github.com/aml-org/examples):
+You can check the validity of this AML dialect using AMF. From the top-level directory of the [examples repository](https://github.com/aml-org/examples):
 
 ```bash
 
@@ -99,7 +99,7 @@ examples [master] $ java -jar amf.jar validate -in "AML 1.0" -mime-in applicatio
 
 ## Parsing metadata documents
 
-Having a valid AML Dialect, we can start using it to parse metadata documents with information about different places.
+Having a valid AML dialect, we can start using it to parse metadata documents with information about different places.
 
 For example, we can try the `golden_gate.yaml` document:
 
@@ -177,7 +177,7 @@ The following JSON-LD document will be returned in the console:
 
 ## Using vocabularies for custom semantics
 
-AML allows users to define the semantics for metadata documents in AML Vocabulary files.
+AML allows users to define the semantics for metadata documents in AML vocabulary files.
 
 The file `aml/quickstart/geolocation.yaml` contains a vocabulary defining a few terms for a custom geolocation vocabulary:
 
@@ -216,7 +216,7 @@ propertyTerms:
 
 ```
 
-We could modify our dialect to generate a new version that uses the AML Vocabulary for geolocation we have just reviewed:
+We could modify our dialect to generate a new version that uses the AML vocabulary for geolocation we have just reviewed:
 
 _places_2.yaml_
 

@@ -17,12 +17,10 @@ class CodeGetter extends Component {
         fetch(API + this.props.codeUrl)
             .then(response => response.text())
             .then(text => {
-                console.log(text);
                 let result = text;
                 let start = this.props.lineStart;
                 let end = this.props.lineEnd;
                 if ((end - start) > 0) {
-                    console.log("splitting");
                     result = result
                         .split('\n')
                         .slice(start, end)

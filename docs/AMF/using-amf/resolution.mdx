@@ -1,0 +1,61 @@
+---
+id: amf_resolution
+title: Resolution
+---
+
+Resolution is the process of applying multiple transformations to the AMF Graph model.
+The resolution pipeline comprises the following stages:
+
+![resolution pipeline](../../assets/images/amf/resolution-pipeline.png)
+
+Resolution allows you to flatten and simplify the AMF graph model by:
+- Resolving links and inheritances
+- Applying RAML traits and resourceTypes
+- Normalization of shapes and parameters
+
+You'll also find resolution is important when converting from one API specification to another.
+For example, when converting a RAML API to OAS, the resolution stage makes changes to the WebApi model to have a valid, OAS-compliant API.
+
+## Pipelines
+Depending on your needs, you can use one of the following resolution pipelines:
+
+- **Default**
+    - Keeps only the parsed graph model and deletes all information no longer relevant, such as `document.declares`
+- **Editing**
+    - Keeps all information in already parsed nodes, such as the source and the declarations
+    - Use when someone is editing the API, such as an interactive API designer that uses AMF in the background
+- **Compatibility**
+    - **Must** be used when converting an API to a different specification
+    - Includes additional AMF-specific information to aid in specification conversion
+
+
+## Examples
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/ResolutionTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/resolution.test.js'
+    />
+</TabItem>
+</Tabs>
+
+
+In the next section you'll learn how validations can be applied to the resolved model to check its validity and report errors.
