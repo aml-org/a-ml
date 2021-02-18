@@ -3,10 +3,10 @@ id: amf_emission
 title: Emission
 ---
 
-Emission is useful for exporting an AMF model to a specific desired format.
-Any AMF model can be emitted as JSON-LD or RDF, which are standard graph representations of the model.
-In the case of the WebApi model in particular, it can also be exported to RAML, OAS, AsyncAPI and all the API specifications to be incorporated in the future:
+Emission is the process of exporting an AMF model to a specific format.
+Any AMF model can be emitted as a standard JSON-LD or RDF graph.
+In the case of the WebApi model in particular, it can also be exported to RAML, OAS and AsyncAPI (AMF intends to support additional specifications as they become available):
 ![emission-graph](../../assets/images/amf/emision-graph.png)
 
-These emissions have some limitations, as some things are specification-specific and cannot be represented in others.
+Each emission has limitations, as some elements may be unique to a specification and can't be represented in others.
 You can find more technical information in the related documentation.

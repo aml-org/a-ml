@@ -3,52 +3,51 @@ id: amf_parsing
 title: Parsing with AMF
 ---
 
-AMF is capable of parsing things like:
+AMF can parse [**AML dialects**](https://aml-org.github.io/aml-spec/dialects) and the following API specifications:
 
-- AML dialects
-- API specifications
-  - RAML
-  - OAS 2 & 3
-  - AsyncAPI 2.0
+- [**RAML 0.8**](https://github.com/raml-org/raml-spec/blob/master/versions/raml-08/raml-08.md)
+- [**RAML 1.0**](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md)
+- [**OAS 2.0**](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+- [**OAS 3.0**](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md)
+- [**AsyncAPI 2.0**](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md)
 
-In this section you'll learn how to parse each one of them, followed by practical examples.
+The following section explains the basics of parsing, and the example shows how to parse each specification in Java or JavaScript.
 
 
 ## Parsing Basics
-Let's cover what a parser does. Parsing is the process of analyzing text made of a sequence of tokens, and then building a data structure based on those tokens.
+Parsing is the process of analyzing a sequence of tokens and then building a data structure from them.
 
-AMF uses [SYAML](https://github.com/aml-org/syaml) to read JSON or YAML files and generate [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (abstract syntax tree)
-from them, which is later used to generate a graph that represents the model. This can either be a WebApi model (represents an API, independent of its specification),
-or an AML Document model (Dialect, Vocabulary or Dialect Instance).
+AMF uses [SYAML](https://github.com/aml-org/syaml) to read a JSON or YAML file and generates an [**abstract syntax tree**](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (AST)
+from the file, which is later used to generate a graph that represents the model.
+The model can be either a Web API model (representing an API, independent of its specification), or an AML document model (a dialect, vocabulary, or dialect instance).
 
-The returned object obtained from parsing is always a [BaseUnit](https://github.com/aml-org/amf/blob/develop/documentation/model.md#baseunit). There are several Objects that are BaseUnits,
-and depending on the file parsed, the actual object returned can be a [Fragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#fragment), a [Module](https://github.com/aml-org/amf/blob/develop/documentation/model.md#module),
-a [Document](https://github.com/aml-org/amf/blob/develop/documentation/model.md#document) or many others, depending on the content in the source file.
-For more in-depth model information check the [AMF Model](https://github.com/aml-org/amf/blob/develop/documentation/model.md) resource.
+Parsing returns a [BaseUnit](https://github.com/aml-org/amf/blob/develop/documentation/model.md#baseunit) object, which is a graph of the model.
+Depending on the content in the parsed file, the BaseUnit object can be a [Fragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#fragment), a [Module](https://github.com/aml-org/amf/blob/develop/documentation/model.md#module),
+a [Document](https://github.com/aml-org/amf/blob/develop/documentation/model.md#document) or another type.
+
+For more information about the AMF model, see the [AMF model documentation](model.mdx) resource.
 
 The following figure shows the parsing process:
 
 ![parsing graph](../../assets/images/amf/parsing-graph.png)
 
 
-- SYAML is used to generate an AST from a YAML/JSON file.
-- AMF uses this AST to generate a graph representation of the model, called BaseUnit.
-    - This model is going to be used in the following stages of AMF.
+- SYAML is used to generate an AST from a YAML/JSON file
+- AMF uses the AST to generate a graph of the model, called BaseUnit
+    - This model will be used in the following stages of AMF (resolution, validation, emission)
 
 ## Parsing code examples
-The paths given to the parser must have a specific structure:
+The file paths you give the parser must have the following structure:
 
-Paths in Windows:
+Windows:
+- Absolute path: `file:///C:/testing/api.raml`
+- Relative path: `file:///api.raml`
 
--   Absolute: `file:///C:/testing/api.raml`
--   Relative: `file:///api.raml`
+MacOS and Unix:
+- Absolute path: `file:///Users/aml/testing/api.raml`
+- Relative path: `file://api.raml`
 
-Paths in Mac and Unix:
-
--   Absolute: `file:///Users/aml/testing/api.raml`
--   Relative: `file://api.raml`
-
-Also, before parsing an AML dialect instance, the dialect must be registered using the `AMF.registerDialect()` function.
+Also, before parsing an AML dialect instance, you must register the dialect using the `AMF.registerDialect()` function.
 
 
 import Tabs from '@theme/Tabs';
