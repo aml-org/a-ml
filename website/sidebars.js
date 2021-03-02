@@ -19,7 +19,9 @@ module.exports = {
             'AML/aml',
             'AML/aml_spec'
         ],
-        'Related Docs': [
+        'Customizable configurations': [
+            'custom/resource_loaders',
+        ],'Related Docs': [
             'related/amf_conversion',
             'related/async_raml_datatypes',
             'related/json_schema_draft_2019_09_to_draft_7'

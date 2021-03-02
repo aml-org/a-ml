@@ -1,0 +1,121 @@
+---
+id: resource_loaders
+title: Custom resource loaders
+---
+
+AMF provides different resource loaders depending on the platform it's being used:
+
+- JVM
+  - FileResourceLoader
+  - HttpResourceLoader
+- JS Server
+  - JsServerFileResourceLoader
+  - JsServerHttpResourceLoader
+- JS Browser
+  - JsBrowserHttpResourceLoader
+
+Depending on the context in which you are running AMF, it's possible that the resources you want to parse cannot be fetched by a simple http or file resource loader.
+There can also be cases where you want to use a custom nomenclature or resolution mechanism for the URIs used to reference content.
+
+For these cases, AMF allows you to define **custom resource loaders** which can be fully customized and then plugged into AMF’s parsers.
+
+## How do you implement a new resource loader?
+You must extend our `amf.client.resource.ResourceLoader` interface and define your own resource loader.
+
+There are two methods in the ResourceLoader interface:
+
+```scala title="amf.client.resource.ResourceLoader.scala"
+  /** Fetch specified resource and return associated content. Resource should have been previously accepted. */
+  /** If the resource not exists, you should return a future failed with an ResourceNotFound exception. */
+  def fetch(resource: String): ClientFuture[Content]
+
+  /** Accepts specified resource. */
+  def accepts(resource: String): Boolean = true
+```
+
+#### Accepts
+`accepts(resource: string): boolean`
+The accept method receives the resource URI and determines if it's a resource it can fetch.
+AMF asks every resource loader in the environment through this method if it can fetch the current resource,
+and throws and `UnsupportedUrlScheme` exception if no resource loader can.
+
+#### Fetch
+`fetch(resource: string): ClientFuture[Content]`
+The fetch method encapsulates the actual loading of the resource, which depends on your implementation, but always returns a future (or promise) of a Content object.
+
+The `Content` object is located at `amf.client.remote.Content` and has 3 things:
+
+- The resource fetched as a stream
+- The URL from which the resource was fetched
+- The [media type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the resource
+
+
+## How do you configure your custom resource loader?
+All parsers receive an optional Environment parameter in their constructor.
+Within this Environment you can directly add your custom resource loaders, or even delete the ones provided by AMF:
+
+```java title="CustomResourceLoader.java"
+Environment env = DefaultEnvironment.apply().add(new CustomResourceLoader());
+Raml10Parser parser = new Raml10Parser(env);
+```
+
+## URI normalization when calling resource loaders
+Before fetching, every URI goes through processing called **normalization** to ensure consistency and standardization.
+The processing steps are:
+
+#### 1. Encode string
+Computes a new version of the string in which each instance of certain characters is replaced by one, two, three, or four escape sequences representing the UTF-8 encoding of the character.
+
+#### 2. Normalization (java.net.URI.normalize)
+is the process by which URLs are modified and standardized.
+The goal of the normalization process is to transform a URL into a normalized or canonical URL so it is possible to determine if two syntactically different URLs are equivalent.
+
+#### 3. Resolve relativeness
+When a URI is relative, this step takes the location of the file from which the URI originates and appends it to the base of the processed relative URI
+
+### Examples of URI normalization
+To understand each step in the normalization we'll use the following example of a raml api which references an external json file:
+
+- URI of main raml api: `file:///Users/user/api.raml`
+- Reference to json file: `type: !include ./folder/../external file.json`
+
+This URI is normalized by the 3 steps described above:
+
+- Encode string
+    - the URI is transformed to `./folder/../external%20file.json`. Notice the encoding of the blank space between words.
+- Normalization
+    - the URI is transformed to `external%20file.json` by removing the relative path and folder structure
+- Resolve relativeness
+    - as the reference was relative, this step appends the URI of the main file to the base of the reference URI: `file:///Users/user/external%20file.json`
+
+Finally, resource loaders will receive the following the normalized URI to fetch the json file: `file:///Users/user/external%20file.json`.
+
+## Code example
+The following code is an example of a custom Resource Loader that is able to obtain resources using a custom protocol:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/ResourceLoaderTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/resource-loader.test.js'
+    />
+</TabItem>
+</Tabs>
