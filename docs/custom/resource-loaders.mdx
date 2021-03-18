@@ -21,7 +21,7 @@ Or you may have cases where you want to use a custom nomenclature or resolution 
 
 In such cases, use custom resource loaders.
 
-## How to implement a new resource loader
+## Implement a new resource loader
 To implement a new resource loader, extend the `amf.client.resource.ResourceLoader` interface and define your own resource loader.
 
 The ResourceLoader interface contains two methods, `fetch` and `accepts`:
@@ -49,7 +49,7 @@ AMF stores the `Content` object at `amf.client.remote.Content`, and it contains:
 - The [media type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) of the resource
 
 
-## How to configure your custom resource loader
+## Configure your custom resource loader
 All parsers receive an optional `Environment` parameter in their constructor.
 You can use the `Environment` parameter to add your custom resource loaders:
 
