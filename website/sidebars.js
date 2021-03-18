@@ -21,6 +21,8 @@ module.exports = {
         ],
         'Customizable configurations': [
             'custom/resource_loaders',
+        ],'Other features': [
+            'other/payload_validation',
         ],'Related Docs': [
             'related/amf_conversion',
             'related/async_raml_datatypes',
