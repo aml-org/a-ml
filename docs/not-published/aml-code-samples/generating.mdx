@@ -1,0 +1,41 @@
+---
+id: generation_code
+title: Generation Code Examples
+hide_title: true
+---
+# Generation Code Examples
+
+The AML renderer can be found in the `Aml10Renderer` class. All generation methods are asynchronous, and either returns a promise/future as a result.
+
+Using the renderer the parsed generated JSON-LD document parsed by AMF for a AML dialect instance can be parsed and the original AML document regenerated.
+
+Before parsing a dialect instance, the dialect must be registered using the `AMF.registerDialect` function.
+
+## Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/master/src/main/java/aml_org/examples/Generating.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/master/src/main/js/Generating.js'
+    />
+</TabItem>
+</Tabs>
