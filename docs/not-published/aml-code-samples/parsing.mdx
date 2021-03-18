@@ -1,0 +1,55 @@
+---
+id: parsing_code
+title: Parsing Code Examples
+hide_title: true
+---
+
+# Parsing Code Examples
+
+The AML parser can be found in the `Aml10Parser` class. All parsing methods are asynchronous, and either returns a promise/future as a result.
+
+Before parsing a dialect instance, the dialect must be registered using the `AMF.registerDialect` function.
+
+## Path examples
+
+The paths given to the parser must have a specific structure:
+
+Paths in Windows:
+
+-   Absolute: `file:///C:/testing/api.raml`
+-   Relative: `file:///api.raml`
+
+Paths in Mac and Unix:
+
+-   Absolute: `file:///Users/aml/testing/api.raml`
+-   Relative: `file://api.raml`
+
+## Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/master/src/main/java/aml_org/examples/Parsing.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/master/src/main/js/Parsing.js'
+    />
+</TabItem>
+</Tabs>
+

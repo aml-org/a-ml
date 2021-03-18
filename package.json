@@ -1,0 +1,8 @@
+{
+  "name": "aml-website",
+  "version": "1.0.0",
+  "scripts": {
+    "preview": "cd website && npm install && npm start",
+    "build": "cd website && npm install && npm run build && npm run serve"
+  }
+}

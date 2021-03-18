@@ -1,0 +1,116 @@
+---
+id: amf_setup
+title: AMF project configuration
+---
+
+This tutorial covers installing all the tools you'll need to run AMF in your application.
+
+
+Artifacts to use AMF can be obtained from:
+-   [Maven](https://repository-master.mulesoft.org/nexus/content/repositories/releases/com/github/amlorg/)
+-   [NPM](https://www.npmjs.com/package/amf-client-js)
+
+
+## Add AMF to your dependencies
+
+First you need to add AMF to your project, whether in Gradle, Maven, or NPM.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+    groupId="framework"
+    defaultValue="gradle"
+    values={[
+        {label: 'Gradle', value: 'gradle'},
+        {label: 'Maven', value: 'maven'},
+        {label: 'NPM', value: 'npm'}
+    ]}
+>
+<TabItem value="gradle">
+
+```gradle
+// add mulesoft repository
+repositories {
+    maven {
+        url 'https://repository-master.mulesoft.org/nexus/content/repositories/releases'
+    }
+}
+dependencies {
+    compile 'com.github.amlorg:amf-client_2.12:x.y.z'
+}
+```
+
+</TabItem>
+<TabItem value="maven">
+
+```
+<dependency>
+    <groupId>com.github.amlorg</groupId>
+    <artifactId>amf-client_2.12</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
+</TabItem>
+<TabItem value="npm">
+
+NPM:
+```bash
+$ npm install --save amf-client-js
+```
+
+Yarn:
+```bash
+$ yarn add --save amf-client-js
+```
+
+
+</TabItem>
+</Tabs>
+
+
+NOTE: you may use the `-SNAPSHOT` versions of the artifacts at your own risk since those snapshot versions may contain breaking changes.
+
+## Code setup
+To use AMF you must first initialize it like so:
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+
+```java
+import amf.client.AMF;
+
+class App {
+    public static void main(String[] args){
+      AMF.init().thenApply(() -> {
+              // ... your code
+      });
+    }
+}
+```
+
+</TabItem>
+<TabItem value="js">
+
+```javascript
+const amf = require('./lib/amf-client-module.js')
+
+await AMF.init();
+
+// ... your code
+```
+
+</TabItem>
+</Tabs>
+
+
+That's it! this is everything you need to start using AMF, in the following sections you can learn how to use every feature AMF has.
