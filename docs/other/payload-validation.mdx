@@ -78,3 +78,47 @@ There are two distinct payload validators:
 
 
 ## 3. Validate payloads
+You can use the following methods of PayloadValidator to validate a payload:
+
+- **`isValid(mediaType: String, payload: String): ClientFuture[Boolean]`**
+    - Validates a payload given its media type in fail-fast mode
+    - Stops execution when it encounters any violation
+    - Used for checking payload validity
+- **`validate(mediaType: String, payload: String): ClientFuture[ValidationReport]`**
+    - Validates a payload given its media type and returns a `ValidationReport` Object containing detailed information about all errors found
+- **`validate(payloadFragment: PayloadFragment): ClientFuture[ValidationReport]`**
+    - Validates a payload from an [AMF PayloadFragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#payloadfragment)
+- **`syncValidate(mediaType: String, payload: String): ValidationReport`**
+    - Validates a payload synchronously
+    - Returns the `ValidationReport` directly
+
+
+### Code examples of payload validation
+The following code examples validate the previously mentioned `User` schema with the payload validation methods:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        codeUrl='examples/new-doc/src/test/java/PayloadValidationTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        codeUrl='examples/new-doc/src/test/js/payload-validation.test.js'
+    />
+</TabItem>
+</Tabs>
