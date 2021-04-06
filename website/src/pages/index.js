@@ -2,6 +2,7 @@ import React from 'react';
 import Helmet from "react-helmet";
 import Editor, {monaco} from '@monaco-editor/react';
 
+const PLAYGROUND_URL = 'https://a.ml/playground/validation.html'
 
 function initMonaco() {
     monaco
@@ -307,17 +308,6 @@ spec:
       args: ["-c", "echo Hello > /pod-data/index.html"]
 `.trim()
 
-function playground() {
-    let url = 'https://a.ml/playground/validation.html'
-    let qsPieces = []
-    qsPieces.push(`dialect=${encodeURIComponent(dialectCode)}`)
-    qsPieces.push(`document=${encodeURIComponent(documentCode)}`)
-    if (qsPieces.length) {
-        url += `?${qsPieces.join('&')}`
-    }
-    return url
-}
-
 const Footer = () =>
     <footer>
         <div className="container footer-sec">
@@ -385,7 +375,7 @@ const Header = () =>
                     <div className="col-md-12 col-sm-12">
                         <h2>Standards and tools to define, parse and link metadata</h2>
                         <div className="buttons">
-                            <a href={playground()} target="__blank" className="btn btn-primary try-it-out-btn">Try
+                            <a href={PLAYGROUND_URL} target="__blank" className="btn btn-primary try-it-out-btn">Try
                                 It Out <i
                                     className="fas fa-expand"/></a>
                         </div>
@@ -454,7 +444,7 @@ const Editors = () =>
                 </div>
             </div>
             <a className="pull-right d-sm-none d-md-block playground-btn try-it-out-btn"
-               href={playground()} target="__blank">
+               href={PLAYGROUND_URL} target="__blank">
                 Try It Out <i className="fas fa-expand"/></a>
         </div>
     </section>
