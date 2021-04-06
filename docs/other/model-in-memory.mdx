@@ -1,0 +1,55 @@
+---
+id: model_in_memory
+title: Creating AMF model in memory
+---
+:::info
+The functionality expressed in this documentation requires familiarity with the
+[amf model](https://github.com/aml-org/amf/blob/develop/documentation/model.md).
+:::
+
+AMF is most commonly used to parse an already existing API,
+but it can also be used to create an API in a fluent and descriptive way.
+
+Some use cases for creating a WebApi model in memory include:
+
+-
+-
+-
+
+
+### Creating a WebApi with AMF programmatically
+In the following code example we're going to create a generic 'Music Service API' with the following functionality:
+
+- `/me` endpoint to retrieve user's profile
+- `/me/playlists` endpoint to retrieve user's playlists
+- `/albums` endpoint to retrieve a specific album or a list of albums by their IDs
+
+As our focus is on building the API, all responses are going to be of type string, but you can further specify
+requests and responses by defining a schema for an album, playlist or user.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+    <TabItem value="java">
+        <CodeGetter
+            language='java'
+            codeUrl='examples/new-doc/src/test/java/ModelBuilderTest.java'
+        />
+    </TabItem>
+    <TabItem value="js">
+        <CodeGetter
+            language='js'
+            codeUrl='examples/new-doc/src/test/js/payload-validation.test.js'
+        />
+    </TabItem>
+</Tabs>
