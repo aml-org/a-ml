@@ -315,7 +315,7 @@ const Footer = () =>
                 <div className="col-md-8 col-sm-12 footer-menu">
                     <a className="navbar-brand" href="/"><img src="img/images/AML_white.svg"/></a>
                     <ul>
-                        <li><a href="docs/AML/aml">Documentation</a></li>
+                        <li><a href="docs">Documentation</a></li>
                         <li><a href="https://aml-org.github.io/aml-spec/vocabularies/">Specification</a></li>
                         <li>
                             <button className="ot-sdk-show-settings optanon-toggle-display removable"
@@ -364,7 +364,7 @@ const Header = () =>
                            href="https://aml-org.github.io/aml-spec/vocabularies/">Specification</a>
                     </li>
                     <li className="nav-item"><a className="nav-link"
-                                                href="docs/AML/aml">Documentation</a></li>
+                                                href="docs">Documentation</a></li>
                 </ul>
             </div>
         </nav>
