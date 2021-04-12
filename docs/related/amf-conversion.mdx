@@ -151,45 +151,243 @@ This is why conversion is done in a resolution stage (using a specific pipeline 
 
 
 # Conversion Examples
-```java title="Example 1. Conversion from RAML 1.0 to OAS 2.0 (Java)"
-AMF.init().get();
-BaseUnit ramlApi = new RamlParser().parseFileAsync("<your-converted-api-file-path>").get();
-Resolver resolver = new Oas20Resolver();
-BaseUnit convertedOasApi = resolver.resolve(ramlApi, ResolutionPipeline.COMPATIBILITY_PIPELINE());
-Renderer renderer = new Oas20Renderer();
-renderer.generateFile(convertedOasApi, "<your-converted-api-file-path>").get();
+### RAML 1.0 converted to OAS 2.0
+In this example we use AMF to parse a RAML API, resolve it with CompatibilityPipeline and then render the API in OAS 2.0 for a full conversion.
+Notice some changes made by the conversion to render a compatible target API:
+- RAML has `uriParameters` but OAS doesn't, so each URI parameter like `{customer_id}` has been changed to an OAS path parameter
+- The `responses` object has no descriptions because they're not required in RAML, but in OAS they are, so an empty description has been added
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="generic API in RAML 1.0 (source API)"
+#%RAML 1.0
+
+title: ACME Banking HTTP API
+version: 1.0
+mediaType: application/json
+
+baseUri: acme-banking.com/apis
+
+/customers:
+  /{customer_id}:
+    uriParameters:
+      customer_id: string
+    get:
+      description: Returns Customer data
+      responses:
+        200:
+          body:
+            application/json:
+    delete:
+      description: Removes a Customer from the system
+    /accounts:
+      get:
+        description: Returns a collection accounts
+        responses:
+          200:
+            body:
+              application/json:
+    /cards:
+      /debit:
+        get:
+          description: Returns a collection of cards
+          responses:
+            200:
+              body:
+                application/json:
+        post:
+          description: Requests the creation of a new DebitCard
+          body:
+            application/json:
+
 ```
 
-```java title="Example 2. Custom ResolutionPipeline creation (Java)"
-class MyOas20ConversionPipeline extends ResolutionPipeline {
-  public MyOas20ConversionPipeline(ErrorHandler eh) {
-    super(eh);
-  }
+</div>
+<div style={myStyle} className='col col--6'>
 
-  @Override
-  public ProfileName profileName() {
-    return Oas20Profile$.MODULE$;
-  }
-
-
-  @Override
-  public Seq<ResolutionStage> steps() {
-    List<ResolutionStage> stages = new ArrayList<>();
-    stages.add(new MyCustomStage(this.eh()));
-    return JavaConverters.asScalaBuffer(stages);
+```json title="converted API in OAS 2.0 (target API)"
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ACME Banking HTTP API",
+    "version": "1.0"
+  },
+  "host": "acme-banking.com",
+  "basePath": "/apis",
+  "paths": {
+    "/customers": {},
+    "/customers/{customer_id}": {
+      "get": {
+        "description": "Returns Customer data",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "Removes a Customer from the system",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/customers/{customer_id}/accounts": {
+      "get": {
+        "description": "Returns a collection accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/customers/{customer_id}/cards": {
+      "parameters": [
+        {
+          "name": "customer_id",
+          "required": true,
+          "in": "path",
+          "type": "string"
+        }
+      ]
+    },
+    "/customers/{customer_id}/cards/debit": {
+      "get": {
+        "description": "Returns a collection of cards",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      },
+      "post": {
+        "description": "Requests the creation of a new DebitCard",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
   }
 }
-
-public class MyCustomStage extends ResolutionStage {
-
-    public MyCustomStage(ErrorHandler errorHandler) {
-        super(errorHandler);
-    }
-
-    @Override
-    public <T extends BaseUnit> T resolve(T model) {
-        return model;
-    }
-}
-
 ```
+
+</div>
+</div>
+</div>
+
+### Code Examples
+This example (and many others) are available in the [examples github repository](https://github.com/aml-org/examples/tree/new-doc/src/test):
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='java/ConversionTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        example='js/conversion.test.js'
+    />
+</TabItem>
+</Tabs>
