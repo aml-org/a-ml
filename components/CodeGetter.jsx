@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import CodeBlock from '@theme/CodeBlock'
 
-const API = 'https://raw.githubusercontent.com/aml-org/';
+const API = 'https://raw.githubusercontent.com/aml-org/examples/master/src/test/';
 
 class CodeGetter extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class CodeGetter extends Component {
     }
 
     componentDidMount() {
-        fetch(API + this.props.codeUrl)
+        fetch(API + this.props.example)
             .then(response => response.text())
             .then(text => {
                 let result = text;
