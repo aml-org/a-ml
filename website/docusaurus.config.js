@@ -56,7 +56,7 @@ module.exports = {
                     position: 'left'
                 },
                 {
-                    to: 'docs/AMF/amf_intro',
+                    to: 'docs',
                     label: 'AMF',
                     position: 'left'
                 },
