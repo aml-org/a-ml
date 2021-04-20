@@ -5,7 +5,7 @@ title: Custom error handlers
 
 :::caution
 The following features of AMF error handling are still in development:
-- Support for custom error handling in parsing, validation and emission stages
+- Support for custom error handling in parsing, validation, and emission stages
 - Javascript support
 :::
 
@@ -75,18 +75,17 @@ Number of results: 1
   Location:
 ```
 
-
 The report contains detailed error information, but with a custom error handler, you could implement additional behavior to:
 
 - Stop execution when a certain type of error is found
-- Process, modify or log incoming errors
+- Process, modify, or log incoming errors
 - Run and check errors of a single stage (for example, parse an OAS 2.0 API and check if it has parsing errors)
 
 To add custom functionality, you need to implement the provided **error handler interface**.
 
 ## Implement the error handler interface
 The error handler interface is located at `amf.client.resolve`, as it's used only in the resolution stage.
-The error handler interface declares the method **`reportConstraint()`** which AMF uses to report runtime errors:
+The error handler interface declares the method **`reportConstraint()`**, which AMF uses to report runtime errors:
 
 ```scala title="amf.client.resolve.ClientErrorHandler"
 trait ClientErrorHandler {
@@ -138,13 +137,13 @@ import CodeGetter from "../../components/CodeGetter";
 <TabItem value="java">
     <CodeGetter
         language='java'
-        codeUrl='examples/new-doc/src/test/java/ErrorHandlerTest.java'
+        example='java/ErrorHandlerTest.java'
     />
 </TabItem>
 <TabItem value="js">
     <CodeGetter
         language='js'
-        codeUrl='examples/new-doc/src/test/js/error-handler.test.js'
+        example='js/error-handler.test.js'
     />
 </TabItem>
 </Tabs>
