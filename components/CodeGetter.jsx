@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CodeBlock from '@theme/CodeBlock'
 
 const API = 'https://raw.githubusercontent.com/aml-org/examples/master/src/test/';
+const GITHUB = 'https://github.com/aml-org/examples/tree/master/src/test/';
 
 class CodeGetter extends Component {
     constructor(props) {
@@ -33,7 +34,10 @@ class CodeGetter extends Component {
 
     render() {
         return (
-            <CodeBlock className={this.props.language}>{this.state.code}</CodeBlock>
+            <div>
+                <CodeBlock className={this.props.language}>{this.state.code}</CodeBlock>
+                <p>Code extracted from the examples <strong><a href={GITHUB + this.props.example}>GitHub repository</a></strong>.</p>
+            </div>
         )
     }
 }
