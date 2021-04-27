@@ -3,27 +3,30 @@ id: scheduler
 title: Control threads in AMF
 ---
 
+AMF allows you to schedule and manage the lifespan of threads.
+The following explains how to create and use a scheduler in AMF.
+
 :::info
-This functionality is specific to JVM (Java or Scala)
+Use of control threads in AMF is specific to Java or Scala applications.
 :::
 
-The most common use cases for thread control are:
+In AMF, common uses of thread control include:
 
-- Applications with specific memory constraints
-- The developer wants control over how the threads are created
-- To insert a certain time interval between AMF executions
+- Addressing memory constraints
+- Controlling thread creation
+- Inserting time intervals between AMF executions
 
-AMF provides you a way of **controlling the thread generation and lifespan** in its execution through the customization of the **`ExecutionEnvironment`**.
-To customize it you need to:
+## Controlling thread generation and lifespan
+AMF allows you to control thread generation and lifespan by customizing the **`ExecutionEnvironment`** object.
+To customize the ExecutionEnvironment object you need to:
 
 1. Create a `java.util.concurrent.ScheduledExecutorService`
 2. Create an `amf.client.execution.ExecutionEnvironment` with the new scheduler
 3. Plug the `ExecutionEnvironment` into AMF initialization or in resolution stage
 
-We'll go through each step, explain what a scheduler can do for us, and provide code examples of multiple use cases.
 
-## Creating a `ScheduledExecutorService`
-To creates a thread pool that can schedule commands to run after a given delay, or to execute them periodically we need to create a `ScheduledExecutorService`:
+## Create a `ScheduledExecutorService`
+To create a thread pool that can schedule commands to run after a given delay, or to execute them periodically, create a `ScheduledExecutorService`:
 
 ```java
 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(30, new ThreadFactory() {
@@ -38,34 +41,36 @@ ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(30, new Th
             }
         });
 ```
-The above scheduler has 30 threads to keep in the pool (even if they are idle) and a specific `ThreadFactory` that sets the thread name when creating new ones.
+This example scheduler keeps 30 threads in the pool (even if they are idle), and creates a specific `ThreadFactory` that sets the thread name when creating a new thread.
 
-The scheduler exposes an API with methods like:
+### Scheduler API methods
+The scheduler exposes the following methods:
 
 - `scheduled()`
-    - Schedule a single task's execution after a fixed delay
+    - Schedule a single task execution after a fixed delay
 - `scheduleAtFixedRate()`
     - Run a task periodically after a fixed delay
 - `shutdown()`
-    - Makes the ExecutorService stop accepting new tasks and shut down after all running threads finish their current work
+    - Stop the `ExecutorService` from accepting new tasks and shut down after all running threads finish their current work
 - `shutdownNow()`
-    - Tries to destroy the ExecutorService immediately, but it doesn't guarantee that all the running threads will be stopped at the same time
-    - This method returns a list of tasks that are waiting to be processed. It is up to the developer to decide what to do with these tasks
-
-More info about `ScheduledExecutorService` interface [here](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html).
+    - Return a list of tasks that are waiting to be processed, and destroy the `ExecutorService` immediately
+    - All running threads may not be stopped at the same time
 
 
-## The AMF `ExecutionEnvironment`
-AMF creates a default `amf.client.environment.Environment` when initialized,
-and this environment can be customized by passing an `amf.client.execution.ExecutionEnvironment`.
+Refer to the Java documentation for more information about the [`ScheduledExecutorService`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html)
 
-As the `ExecutionEnvironment` is responsible for thread creation, it can receive a `ScheduledExecutorService` to use when creating them.
-This is where our created scheduler comes in.
+
+## Create and add the `ExecutionEnvironment` in AMF
+When initialized, AMF creates a default `amf.client.environment.Environment`. You can customize this environment by passing an `amf.client.execution.ExecutionEnvironment` object.
+
+The `ExecutionEnvironment` is responsible for thread creation, and it can receive a `ScheduledExecutorService` to use when creating threads.
+
+You can plug your customized `ExecutionEnvironment` into AMF's initialization, or add it when creating a specific parser.
 
 This customized environment can be plugged into AMF's initialization or when creating a specific parser.
 
-## Code Examples
-In this code examples we'll show the creation of a scheduler, and it's usage throughout AMF:
+## Example code for creating a scheduler
+The following example code shows the creation of a scheduler, and its usage throughout AMF:
 
 import CodeGetter from "../../components/CodeGetter";
 
