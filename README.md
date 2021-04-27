@@ -23,8 +23,8 @@
 4. If you want to build the static website and serve it, run `npm run build` instead.
 
 ## Contribution
-AML's website is in fact an open source project and your contribution is very much appreciated. 
-Before you start, you should check for open issues or open a fresh issue to start a discussion around an idea that 
+AML's website is in fact an open source project and your contribution is very much appreciated.
+Before you start, you should check for open issues or open a fresh issue to start a discussion around an idea that
 you'd like to see on our website or a bug. If you want to support us fixing issues, please follow the steps below:
 
 1. Fork the repository on Github and make your changes on the `develop` branch (or branch off of it).
