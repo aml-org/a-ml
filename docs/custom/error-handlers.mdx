@@ -9,7 +9,7 @@ The following features of AMF error handling are still in development:
 - Javascript support
 :::
 
-# What's an AMF error handler
+## AMF error handlers
 
 An error handler is a mechanism that lets you handle any errors that arise while using AMF.
 You can define custom error handlers and use them as plugins in AMF's resolution stage.
@@ -26,7 +26,7 @@ There are 3 types of errors in AMF, denoted by the `amf.core.validation.Severity
   - Indicates that something is in violation of normal operations or is not compliant with its specification
   - Invalidates the AMF graph model
 
-# How error handling works in AMF
+## How error handling works in AMF
 AMF transforms each error into a `ValidationResult`, and collects all generated results in a `ValidationReport`.
 After the [validation stage](../AMF/using-amf/amf_validation#validation-examples), AMF returns the ValidationReport.
 
@@ -118,7 +118,7 @@ The method takes the following arguments:
     - The error's location in the AMF graph model
 
 
-# Example code for a custom error handler
+## Example code for a custom error handler
 The following example code is for a custom error handler that throws an exception when an error is found:
 
 import Tabs from '@theme/Tabs';
