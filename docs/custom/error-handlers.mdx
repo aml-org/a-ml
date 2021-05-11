@@ -1,0 +1,149 @@
+---
+id: error_handlers
+title: Custom error handlers
+---
+
+:::caution
+The following features of AMF error handling are still in development:
+- Support for custom error handling in parsing, validation, and emission stages
+- Javascript support
+:::
+
+## AMF error handlers
+
+An error handler is a mechanism that lets you handle any errors that arise while using AMF.
+You can define custom error handlers and use them as plugins in AMF's resolution stage.
+
+There are 3 types of errors in AMF, denoted by the `amf.core.validation.SeverityLevels` object:
+
+- **Info**
+  - Indicates something may or may not be wrong
+  - Typically informational depending on user intent
+- **Warning**
+  - Indicates that something is not correct and action is required
+  - Includes warnings about future changes, tool deprecations, or errors that will become violations in the future
+- **Violation**
+  - Indicates that something is in violation of normal operations or is not compliant with its specification
+  - Invalidates the AMF graph model
+
+## How error handling works in AMF
+AMF transforms each error into a `ValidationResult`, and collects all generated results in a `ValidationReport`.
+After the [validation stage](../AMF/using-amf/amf_validation#validation-examples), AMF returns the ValidationReport.
+
+```scala title="amf.core.validation.core.ValidationReport"
+trait ValidationResult {
+  def message: Option[String]
+  def path: String
+  def sourceConstraintComponent: String
+  def focusNode: String
+  def severity: String
+  def sourceShape: String
+}
+
+trait ValidationReport {
+  def conforms: Boolean
+  def results: List[ValidationResult]
+}
+```
+## Example `ValidationReport`
+For example, consider the following OAS 3.0 API:
+
+```json
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "test api",
+    "version": "1"
+  }
+}
+```
+
+This API is invalid as it doesn't have the `paths:{}` object that is required by the
+[OpenAPI 3.0 Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#schema).
+In this case, AMF returns the following `ValidationReport`:
+
+```text
+Profile: OAS 3.0
+Conforms? false
+Number of results: 1
+- Source: http://a.ml/vocabularies/amf/parser#mandatory-paths-property
+  Message: 'paths' is mandatory in OAS spec
+  Level: Violation
+  Target: file://amf-client/shared/src/test/resources/validations/oas3/paths-property.json#/web-api
+  Property:
+  Position: None
+  Location:
+```
+
+The report contains detailed error information, but with a custom error handler, you could implement additional behavior to:
+
+- Stop execution when a certain type of error is found
+- Process, modify, or log incoming errors
+- Run and check errors of a single stage (for example, parse an OAS 2.0 API and check if it has parsing errors)
+
+To add custom functionality, you need to implement the provided **error handler interface**.
+
+## Implement the error handler interface
+The error handler interface is located at `amf.client.resolve`, as it's used only in the resolution stage.
+The error handler interface declares the method **`reportConstraint()`**, which AMF uses to report runtime errors:
+
+```scala title="amf.client.resolve.ClientErrorHandler"
+trait ClientErrorHandler {
+
+  def reportConstraint(id: String,
+                       node: String,
+                       property: ClientOption[String],
+                       message: String,
+                       range: ClientOption[amf.core.parser.Range],
+                       level: String,
+                       location: ClientOption[String]): Unit
+}
+```
+
+The method takes the following arguments:
+
+- **`id`**
+    - The id of the error
+- **`node`**
+    - The AMF model node containing the error
+- **`property`** (optional)
+    - The specific property that is faulty
+- **`message`**
+    - The message that describes the error
+- **`range`** (optional)
+    - The specific part of the parsed file that generates the error
+- **`level`**
+    - The SeverityLevel of the error: info, warning, or violation
+- **`location`** (optional)
+    - The error's location in the AMF graph model
+
+
+## Example code for a custom error handler
+The following example code is for a custom error handler that throws an exception when an error is found:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "../../components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='java/ErrorHandlerTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        language='js'
+        example='js/error-handler.test.js'
+    />
+</TabItem>
+</Tabs>
