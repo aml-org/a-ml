@@ -21,6 +21,7 @@ module.exports = {
     ],
     'Customizable configurations': [
       'custom/resource_loaders',
+      'custom/error_handlers',
     ],'Related Docs': [
       'related/amf_conversion',
       'related/async_raml_datatypes',
