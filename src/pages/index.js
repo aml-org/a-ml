@@ -344,7 +344,7 @@ const Header = () =>
         <Helmet>
             <title>Welcome | AML</title>
         </Helmet>
-        <nav className="nav-container navbar navbar-expand-md navbar-dark">
+        <nav className="nav-container navbar-expand-md navbar-dark">
             <h1><a className="navbar-brand" href="/"><img src="img/images/AML_white.svg" alt="logo"/></a></h1>
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#collapsibleNavbar">
