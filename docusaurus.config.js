@@ -11,6 +11,7 @@ module.exports = {
   projectName: 'aml-docs',
   plugins: ['docusaurus-plugin-sass'],
   themeConfig: {
+    hideableSidebar: true,
     // used for crawling site and generating searching with DocSearch
     algolia: {
       apiKey: 'f627767b6ec831d4a1782bf7207f845e',
