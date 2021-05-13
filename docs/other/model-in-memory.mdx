@@ -1,31 +1,26 @@
 ---
 id: model_in_memory
-title: Creating AMF model in memory
+title: Creating an AMF model in memory
 ---
-:::info
-The functionality expressed in this documentation requires familiarity with the
-[amf model](https://github.com/aml-org/amf/blob/develop/documentation/model.md).
-:::
 
-AMF is most commonly used to parse an already existing API,
-but it can also be used to create an API in a fluent and descriptive way.
+AMF allows you to parse existing APIs, but you can also use it to model fluent, descriptive APIs in memory.
 
-Some use cases for creating a WebApi model in memory include:
+You can use an [AMF WebApi](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) in memory to:
 
-- To edit an already parsed API with AMF
-- When using AMF to power a visual API designer
-- To create programmatic API tests
+- Edit an already parsed API
+- Power a visual API designer
+- Create programmatic API tests
 
 
-### Creating a WebApi with AMF programmatically
-In the following code example we're going to create a generic 'Music Service API' with the following functionality:
+### Create a WebApi with AMF
+The following code example creates a generic "Music Service API", with the following endpoints:
 
-- `/me` endpoint to retrieve user's profile
-- `/me/playlists` endpoint to retrieve user's playlists
-- `/albums` endpoint to retrieve a specific album or a list of albums by their IDs
+- `/me`: Retrieves a user's profile
+- `/me/playlists`: Retrieves user's playlists
+- `/albums`: Retrieves a specific album or a list of albums by their IDs
 
-As our focus is on building the API, all responses are going to be of type string, but you can further specify
-requests and responses by defining a schema for an album, playlist or user.
+For the purposes of this API, all responses are returned as strings,
+but you can further specify requests and responses by defining a schema for an album, playlist, or user.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
