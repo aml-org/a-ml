@@ -6,8 +6,8 @@ title: Payload validation with AMF
 You can use AMF to validate incoming payloads to an API already deployed and running.
 For example, consider a RAML API that declares:
 
-- a `User` schema with `firstname`, `lastname`, and `age` properties
-- a `/users` endpoint with an HTTP POST method that requires a `User` object as body parameter
+- A `User` schema with `firstname`, `lastname`, and `age` properties
+- A `/users` endpoint with an HTTP POST method that requires a `User` object as body parameter
 
 ```yaml
 #%RAML 1.0
@@ -41,10 +41,10 @@ When AMF parses an API, it:
 ![api to webapi model](../assets/images/other/api-to-webapi.png)
 
 The [AMF Model Documentation](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) has more information
-on each intermediate model. The Payload shape we'll use can be obtained from an `Operation` `Request` or `Response` object.
+on each intermediate model. The payload shape we'll use can be obtained from an `Operation` `Request` or `Response` object.
 
 ## Create a `PayloadValidator`
-The Payload shape (or schema) is a specific implementation of the [AnyShape](https://github.com/aml-org/amf/blob/develop/documentation/model.md#anyshape) class,
+The payload shape (or schema) is a specific implementation of the [AnyShape](https://github.com/aml-org/amf/blob/develop/documentation/model.md#anyshape) class,
 which implements the **`ValidatorAware`** interface:
 
 ```scala title="amf.client.model.domain.ValidatorAware.scala"
@@ -83,7 +83,7 @@ To validate a payload with `PayloadValidator`, use the following methods:
     - Stops execution when it encounters any violation
     - Used for checking payload validity
 - **`validate(mediaType: String, payload: String): ClientFuture[ValidationReport]`**
-    - returns a `ValidationReport` object containing detailed information about any errors
+    - Returns a `ValidationReport` object containing detailed information about any errors
 - **`validate(payloadFragment: PayloadFragment): ClientFuture[ValidationReport]`**
     - Validates a payload from an [AMF PayloadFragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#payloadfragment)
 - **`syncValidate(mediaType: String, payload: String): ValidationReport`**
