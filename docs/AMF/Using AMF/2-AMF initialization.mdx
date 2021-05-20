@@ -3,10 +3,9 @@ id: amf_initialization
 title: AMF initialization
 ---
 
-As you've read in the [Code Setup](amf_setup#code-setup) of the previous section, the method `AMF.init()` initializes AMF and gets it ready to work.
-In this section you'll learn how the method works and what are the **different ways of initializing AMF** depending on your use case.
+After you add the AMF initialize method to your application code, you can initialize AMF and register the plugins you intend to use.
 
-The initialization method registers the following plugins:
+The initialization method, `AMF.init()` registers the following plugins:
 - WebApi
 - Vocabularies
 - AMFCustomValidation
@@ -24,7 +23,7 @@ def init(executionEnvironment: BaseExecutionEnvironment): ClientFuture[Unit] = {
 }
 ```
 
-Knowing this, you can cherry-pick and use only the plugins you need. For example, if you wanted to parse and resolve the OAS 3.0 specification,
+Depending on your use case, you can cherry-pick and use only the plugins you need. For example, if you wanted to parse and resolve the OAS 3.0 specification,
 you would need only the WebApi plugin:
 
 ```java
