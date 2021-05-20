@@ -1,12 +1,22 @@
 FROM node:lts
 
-WORKDIR /app/website
+WORKDIR /app
 
 EXPOSE 3000 35729
 COPY ./components /app/components
 COPY ./docs /app/docs
-COPY ./website /app/website
-RUN yarn install
+COPY ./src /app/src
+COPY ./static /app/static
+COPY ./babel.config.js /app/babel.config.js
+COPY ./docusaurus.config.js /app/docusaurus.config.js
+COPY ./package.json /app/package.json
+COPY ./sidebars.js /app/sidebars.js
+COPY ./yarn.lock /app/yarn.lock
 
-CMD ["yarn", "build"]
-CMD ["yarn", "serve"]
+CMD ["yarn", "run", "build-and-serve"]
+
+COPY ./babel.config.js /app/babel.config.js
+COPY ./docusaurus.config.js /app/docusaurus.config.js
+COPY ./package.json /app/package.json
+COPY ./sidebars.js /app/sidebars.js
+COPY ./yarn.lock /app/yarn.lock
