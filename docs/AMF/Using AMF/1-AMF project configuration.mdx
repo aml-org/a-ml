@@ -15,8 +15,6 @@ You can download the necessary AMF artifacts from:
 ## Add AMF to your dependencies
 The following example shows how to add AMF to your project using Gradle, Maven, or NPM.
 
-//reviewer note: I'm confused by this section, as it's not clear to me how this is formatted or what it's showing. 
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -57,14 +55,10 @@ dependencies {
 </TabItem>
 <TabItem value="npm">
 
-NPM:
+NPM or Yarn:
 ```bash
-$ npm install --save amf-client-js
-```
-
-Yarn:
-```bash
-$ yarn add --save amf-client-js
+$ npm install --save amf-client-js #using npm
+$ yarn add --save amf-client-js #using yarn
 ```
 
 
@@ -74,7 +68,7 @@ $ yarn add --save amf-client-js
 
 NOTE: you may use the `-SNAPSHOT` versions of the artifacts at your own risk since those snapshot versions may contain breaking changes.
 
-## AMF initialization code example
+## Add the AMF initialization method to your application code
 
 The following example shows how to initialize AMF in your application:
 
@@ -115,4 +109,4 @@ await AMF.init();
 </TabItem>
 </Tabs>
 
-Learn more about using the [AMF initialization method, `AMF.init()`](amf_initialization).```
+Learn more about using the [AMF initialization method, `AMF.init()`](amf_initialization).
