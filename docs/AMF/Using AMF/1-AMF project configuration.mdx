@@ -3,17 +3,17 @@ id: amf_setup
 title: AMF project configuration
 ---
 
-This tutorial covers installing all the tools you'll need to run AMF in your application.
+To run AMF in your application, you'll need add AMF to your dependencies and then add the AMF intialiization method to your application code. 
 
 
-Artifacts to use AMF can be obtained from:
+## Download AMF artifacts
+You can download the necessary AMF artifacts from:
 -   [Maven](https://repository-master.mulesoft.org/nexus/content/repositories/releases/com/github/amlorg/)
 -   [NPM](https://www.npmjs.com/package/amf-client-js)
 
 
 ## Add AMF to your dependencies
-
-First you need to add AMF to your project, whether in Gradle, Maven, or NPM.
+The following example shows how to add AMF to your project using Gradle, Maven, or NPM.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -55,14 +55,10 @@ dependencies {
 </TabItem>
 <TabItem value="npm">
 
-NPM:
+NPM or Yarn:
 ```bash
-$ npm install --save amf-client-js
-```
-
-Yarn:
-```bash
-$ yarn add --save amf-client-js
+$ npm install --save amf-client-js #using npm
+$ yarn add --save amf-client-js #using yarn
 ```
 
 
@@ -72,8 +68,9 @@ $ yarn add --save amf-client-js
 
 NOTE: you may use the `-SNAPSHOT` versions of the artifacts at your own risk since those snapshot versions may contain breaking changes.
 
-## Code setup
-To use AMF you must first initialize it like so:
+## Add the AMF initialization method to your application code
+
+The following example shows how to add the AMF initialization method (`AMF.init()`) in your application code:
 
 <Tabs
     groupId="languages"
@@ -112,5 +109,4 @@ await AMF.init();
 </TabItem>
 </Tabs>
 
-
-That's it! this is everything you need to start using AMF, in the following sections you can learn how to use every feature AMF has.
+Learn more about using the [AMF initialization method, `AMF.init()`](amf_initialization).
