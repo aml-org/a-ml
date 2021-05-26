@@ -11,12 +11,12 @@ COPY ./babel.config.js /app/babel.config.js
 COPY ./docusaurus.config.js /app/docusaurus.config.js
 COPY ./package.json /app/package.json
 COPY ./sidebars.js /app/sidebars.js
-COPY ./yarn.lock /app/yarn.lock
+COPY ./package-lock.json /app/package-lock.json
 
-CMD ["yarn", "run", "build-and-serve"]
+CMD ["npm", "run", "build-site"]
 
 COPY ./babel.config.js /app/babel.config.js
 COPY ./docusaurus.config.js /app/docusaurus.config.js
 COPY ./package.json /app/package.json
 COPY ./sidebars.js /app/sidebars.js
-COPY ./yarn.lock /app/yarn.lock
+COPY ./package-lock.json /app/package-lock.json
