@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  docusaurus:
+    build: .
+    ports:
+      - 3000:3000
+      - 35729:35729
+    volumes:
+      - ./components:/app/components
+      - ./docs:/app/docs
+      - ./src:/app/src
+      - ./static:/app/static
+      - ./babel.config.js:/app/babel.config.js
+      - ./docusaurus.config.js:/app/docusaurus.config.js
+      - ./package.json:/app/package.json
+      - ./sidebars.js:/app/sidebars.js
+      - ./package-lock.json:/app/package-lock.json
+    working_dir: /app
