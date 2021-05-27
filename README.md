@@ -3,7 +3,7 @@
 > This repository contains the source code for the a.ml website developed in React, including the AML and AMF documentation
 
 ## Requirements
-* Yarn >= 1.2
+* Node.js version >= 12.13.0 or above
 
 ## Running locally
 1. Pull the code locally:
@@ -12,15 +12,15 @@
     $ git clone https://github.com/aml-org/a-ml
     ```
 
-2. In the root folder run `yarn run preview` to preview the website live:
+2. In the root folder run `npm run preview` to preview the website live:
 
     ```bash
-    $ yarn run preview
+    $ npm run preview
     ```
 
 3. The server should be up and the website available in http://localhost:3000/.
 
-4. If you want to build the static website and serve it, run `yarn run build-and-serve` instead.
+4. If you want to build the static website and serve it, run `npm run build-and-serve` instead.
 
 ## Contribution
 AML's website is in fact an open source project, and your contribution is very much appreciated.
