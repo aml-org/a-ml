@@ -49,6 +49,11 @@ module.exports = {
           position: 'left'
         },
         {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
+        },
+        {
           href: 'https://www.npmjs.com/package/amf-client-js',
           className: 'header-npm-link',
           'aria-label': 'npm link',
@@ -109,7 +114,20 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/aml-org/a-ml/edit/develop/'
+          editUrl: 'https://github.com/aml-org/a-ml/edit/develop/',
+          disableVersioning: false,
+          includeCurrentVersion: true,
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'AMF v5.x.x (WIP)',
+              path: '',
+            },
+            '4.x.x': {
+              label: 'AMF 4.x.x',
+              path: 'v4',
+            },
+          },
         },
         blog: false
       },

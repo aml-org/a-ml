@@ -1,0 +1,249 @@
+---
+id: json_schema_draft_2019_09_to_draft_7
+title: Json Schema Draft 2019-09 to Draft 7 Emission
+---
+
+:::info Technical Document
+This is a technical document, this information is intended for experienced users
+:::
+
+#### Summary
+This document is an analysis of which parts of Draft 2019-09 can be emitted as Draft 7 to workaround existing lack of validation support for Draft 2019-09.
+The validators used by AMF have no short-term plans to support this draft.
+
+#### Background
+An initial support of Draft 2019-09 is necessary to start support of OpenAPI 3.1. This support includes parsing, emission and validation.
+The only aspect that is not owned by AMF is validation, which is delegated to Ajv for the JS Platform and Everit for JVM.
+
+These libraries won’t be supporting Draft 2019-09 in the short term so we need to workaround this.
+As we already re-emit parsed Json Schemas to validate them, we want to assess the possibility of cross-emitting Draft 2019-09 to Draft 7 to take advantage of the current supported drafts.
+
+
+## Related aspects
+
+### Error messages
+Translating Draft 2019-09 into Draft 7 will affect error messages as the schema path in the error will be different from the original. For example:
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 2019-09"
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "credit_card": { "type": "number" },
+    "bank_number": { "type": "number"}
+  },
+  "required": ["name"],
+  "dependentSchemas": {
+    "credit_card": {
+      "properties": {
+        "billing_address": { "type": "string" }
+      },
+      "required": ["billing_address"]
+    }
+  },
+  "dependentRequired": {
+    "bank_number": ["credit_card"]
+  }
+}
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 7"
+{
+   "$schema": "https://json-schema.org/draft/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "credit_card": { "type": "number" },
+    "bank_number": { "type": "number"}
+  },
+  "required": ["name"],
+  "dependencies": {
+    "credit_card": {
+      "properties": {
+        "billing_address": { "type": "string" }
+      },
+      "required": ["billing_address"]
+    },
+    "bank_number": ["credit_card"]
+  }
+}
+```
+
+</div>
+</div>
+</div>
+
+
+These semantically equal schemas are written differently according to the draft version. They both define two dependencies,
+one is a subschema and the other is a boolean array. The only difference is the error message they will produce **if** the schema path is present.
+
+On validating the following example, we can see that the `billing_address` key is missing:
+
+```json
+{
+  "name": "Someone",
+  "bank_number": 4,
+  "credit_card": 5
+}
+```
+
+The schema paths of each error are:
+- Draft 2019-09: `#/dependentSchemas/credit_card/required`
+- Draft 7: `#/dependencies/credit_card/required.`
+
+
+
+### Untranslatable keywords
+there are some Draft 2019-09 keywords that cannot be ported to Draft 7 as they are entirely new concepts.
+We should decide the expected behaviour if a user tries to validate a payload against a Draft 2019-09 parsed schema. There are several options:
+
+- **Warning or violation when validating**
+    - We could issue a warning or violation when we detect that a schema parsed from Draft 2019-09 is used.
+    To do this we would have to traverse the schema and detect for specific model attributes. This will add processing time to validation.
+
+- **Warning or violation when parsing**
+    - We could emit a warning or violation when parsing. This is efficient as we only have to detect a Draft 2019-09 specific keyword, something that is necessary for parsing.
+    - The downside is that the “parsing module” fully supports Draft 2019-09, it doesn't make sense to specify a “validation rule” on the “parsing module”.
+
+- **Only add it to Release Notes**
+    - The third option is to only add it in the Release Notes and nothing else. Each consumer will be able to handle it as it likes without AMF imposing specific feedback.
+
+All the considered options have to be **backward compatible**.
+
+
+## Proposed translations
+#### Remove `format` keyword OR turn off format validations if possible
+In Draft 2019-09 format validations are turned off. We should respect this in Draft 7 and do one of two:
+- Remove `format` keywords on schema emission to avoid the validation.
+- Turn off “format” validations in Ajv and Everit. Ajv seems to be the only one that has it well documented.
+Another thing to test is how the “format” value is validated (if it is limited to a possible set of values by the validator)
+
+#### Change `$defs` for `definitions`
+A really straight-forward change.
+
+#### `$ref` keyword will be emitted as `allOf`
+In Json Schema 2019-09 the `$ref` keyword can now be alongside other keywords, but we can’t lose the surrounding, same-level information (that is not taken into account when a `$ref` is found).
+According to several parts in the Json Schema issues, the following transformation should be valid for our use case:
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 2019-09"
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "$ref": "#/definitions/somewhere"
+}
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 7"
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/somewhere"
+    }
+  ]
+}
+```
+
+</div>
+</div>
+</div>
+
+If the schema already has an `allOf`, the `$ref` will simply be appended to it. An annotation will need to be added to signal that it is a top level schema.
+
+#### Unify `dependentSchemas` and `dependentRequired` into `dependencies`
+These Draft 2019-09 facets should be unified in Draft 7. For example:
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 2019-09"
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "credit_card": { "type": "number" },
+    "bank_number": { "type": "number"}
+  },
+  "required": ["name"],
+  "dependentSchemas": {
+    "credit_card": {
+      "properties": {
+        "billing_address": { "type": "string" }
+      },
+      "required": ["billing_address"]
+    }
+  },
+  "dependentRequired": {
+    "bank_number": ["credit_card"]
+  }
+}
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```json title="Draft 7"
+{
+  "$schema": "https://json-schema.org/draft/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "credit_card": { "type": "number" },
+    "bank_number": { "type": "number"}
+  },
+  "required": ["name"],
+  "dependencies": {
+    "credit_card": {
+      "properties": {
+        "billing_address": { "type": "string" }
+      },
+      "required": ["billing_address"]
+    },
+    "bank_number": ["credit_card"]
+  }
+}
+```
+
+</div>
+</div>
+</div>
+
+
+#### Unsupported properties
+The following properties will not be translated into Draft 2019-09 as there is no possible construct in Draft 7:
+- `unevaluatedProperties` and `unevaluatedItems`
+- `minContains` and `maxContains`
+- `contentSchema`
+
+Warnings will be added if one of the above fields exist when emitting another Draft that isn’t 2019.
+The only exception will be `contentSchema` that won’t be validated as the spec says it is a SHOULD.
