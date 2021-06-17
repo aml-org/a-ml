@@ -9,7 +9,15 @@ module.exports = {
   favicon: 'img/logos/amlLogo.svg',
   organizationName: 'aml-org',
   projectName: 'aml-docs',
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: [
+      'docusaurus-plugin-sass',
+    [
+      require.resolve('docusaurus-gtm-plugin'),
+      {
+        id: 'GTM-TKR6L22', // GTM Container ID
+      }
+    ]
+  ],
   themeConfig: {
     hideableSidebar: true,
     // used for crawling site and generating searching with DocSearch
