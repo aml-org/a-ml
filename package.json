@@ -25,6 +25,7 @@
     "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
     "clsx": "^1.1.1",
+    "docusaurus-gtm-plugin": "0.0.2",
     "docusaurus-plugin-sass": "^0.1.12",
     "prism-react-renderer": "^1.2.0",
     "react": "^17.0.1",
