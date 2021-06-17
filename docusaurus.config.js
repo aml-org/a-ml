@@ -26,7 +26,7 @@ module.exports = {
       indexName: 'a-ml'
     },
     prism: {
-      additionalLanguages: ['java'],
+      additionalLanguages: ['java', 'scala'],
       defaultLanguage: 'java',
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/dracula'),
@@ -120,7 +120,7 @@ module.exports = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'AMF v5.x.x (WIP)',
+              label: 'AMF v5.0.0-beta',
               path: '',
             },
             '4.x.x': {
