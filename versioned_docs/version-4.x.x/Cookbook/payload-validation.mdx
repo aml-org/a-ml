@@ -102,31 +102,21 @@ import CodeGetter from "/components/CodeGetter";
     groupId="languages"
     defaultValue="java"
     values={[
-        {label: 'Scala', value: 'scala'},
         {label: 'Java', value: 'java'},
-        {label: 'TypeScript', value: 'ts'}
+        {label: 'JavaScript', value: 'js'}
     ]}
 >
 
-<TabItem value="scala">
-    <CodeGetter
-        AMFVersion='v5'
-        language='scala'
-        example='scala/PayloadValidationTestScala.scala'
-    />
-</TabItem>
 <TabItem value="java">
     <CodeGetter
-        AMFVersion='v5'
         language='java'
         example='java/PayloadValidationTest.java'
     />
 </TabItem>
-<TabItem value="ts">
+<TabItem value="js">
     <CodeGetter
-        AMFVersion='v5'
-        language='typescript'
-        example='ts/payload.validation.spec.ts'
+        language='js'
+        example='js/payload-validation.test.js'
     />
 </TabItem>
 </Tabs>

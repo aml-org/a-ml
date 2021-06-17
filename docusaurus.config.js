@@ -26,7 +26,7 @@ module.exports = {
       indexName: 'a-ml'
     },
     prism: {
-      additionalLanguages: ['java'],
+      additionalLanguages: ['java', 'scala'],
       defaultLanguage: 'java',
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/dracula'),
@@ -47,6 +47,11 @@ module.exports = {
           to: 'docs',
           label: 'AMF',
           position: 'left'
+        },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
         },
         {
           href: 'https://www.npmjs.com/package/amf-client-js',
@@ -109,7 +114,20 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/aml-org/a-ml/edit/develop/'
+          editUrl: 'https://github.com/aml-org/a-ml/edit/develop/',
+          disableVersioning: false,
+          includeCurrentVersion: true,
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'AMF v5.0.0-beta',
+              path: '',
+            },
+            '4.x.x': {
+              label: 'AMF 4.x.x',
+              path: 'v4',
+            },
+          },
         },
         blog: false
       },
