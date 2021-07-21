@@ -30,31 +30,21 @@ import CodeGetter from "/components/CodeGetter";
     groupId="languages"
     defaultValue="java"
     values={[
-        {label: 'Scala', value: 'scala'},
         {label: 'Java', value: 'java'},
-        {label: 'TypeScript', value: 'ts'}
+        {label: 'JavaScript', value: 'js'}
     ]}
 >
 
-<TabItem value="scala">
-    <CodeGetter
-        AMFVersion='v5'
-        language='scala'
-        example='scala/ModelBuilderTestScala.scala'
-    />
-</TabItem>
 <TabItem value="java">
     <CodeGetter
-        AMFVersion='v5'
         language='java'
         example='java/ModelBuilderTest.java'
     />
 </TabItem>
-<TabItem value="ts">
+<TabItem value="js">
     <CodeGetter
-        AMFVersion='v5'
-        language='typescript'
-        example='ts/model.builder.spec.ts'
+        language='js'
+        example='js/model-builder.test.js'
     />
 </TabItem>
 </Tabs>
