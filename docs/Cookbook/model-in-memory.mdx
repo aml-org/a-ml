@@ -4,7 +4,7 @@ title: Creating an AMF model in memory
 sidebar_position: 1
 ---
 
-AMF allows you to parse existing APIs, but you can also use it to model fluent, descriptive APIs in memory.
+AMF can also be used to create APIs in your code, in a fluent and descriptive way.
 
 You can use an [AMF WebApi](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) in memory to:
 
@@ -39,23 +39,20 @@ import CodeGetter from "/components/CodeGetter";
 
 <TabItem value="scala">
     <CodeGetter
-        AMFVersion='v5'
         language='scala'
-        example='scala/ModelBuilderTestScala.scala'
+        example='ModelBuilderTest.scala'
     />
 </TabItem>
 <TabItem value="java">
     <CodeGetter
-        AMFVersion='v5'
         language='java'
-        example='java/ModelBuilderTest.java'
+        example='ModelBuilderTest.java'
     />
 </TabItem>
 <TabItem value="ts">
     <CodeGetter
-        AMFVersion='v5'
-        language='typescript'
-        example='ts/model.builder.spec.ts'
+        language='ts'
+        example='model.builder.spec.ts'
     />
 </TabItem>
 </Tabs>
