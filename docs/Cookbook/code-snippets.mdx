@@ -1,0 +1,220 @@
+---
+id: code_snippets
+title: AMF code snippets
+sidebar_position: 9
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+In this document we'll go through examples of using AMF 5 from the [**Examples Repository**](https://github.com/aml-org/examples),
+where you can clone, run, and test all AMF 5 examples in this documentation.
+
+## Cover the basics
+If you don't know how to use AMF yet, refer to the [Using AMF](../AMF/Using%20AMF/amf_setup) section to learn how to
+[add AMF to your project](../AMF/Using%20AMF/amf_setup) and how to use AMFs [configuration and client](../AMF/Using%20AMF/amf_configuration) objects.
+
+# Code snippets
+These examples showcase AMF functionality beyond the common use cases already documented in the AMF section.
+
+### How to add an `EventListener`
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='EventListenerTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='EventListenerTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        hideLink={true}
+        language='ts'
+        example='event.listener.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+### How to create a Transformation Pipeline
+Note: Pipeline creation is only supported in Scala and Java.
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='PipelineCreationTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='PipelineCreationTest.java'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+### How to serialize a `Shape` to JSON Schema
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='ShapeSerializationTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='ShapeSerializationTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        hideLink={true}
+        language='ts'
+        example='shape.serialization.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+### How to render a Domain Element
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='RenderDomainElementTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='RenderDomainElementTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        hideLink={true}
+        language='ts'
+        example='render.element.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+### Render an API as a Stream
+Note: Streaming is only supported in Scala and Java.
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='StreamedRenderTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='StreamedRenderTest.java'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+### Create an AMF configuration from an API
+AMF can automatically detect the type of [AMF Configuration](../AMF/Using%20AMF/amf_configuration) needed for an API:
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        language='scala'
+        example='UnknownConfigCreation.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        language='java'
+        example='UnknownConfigCreation.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        hideLink={true}
+        language='ts'
+        example='unknown.config.creation.spec.ts'
+    />
+</TabItem>
+</Tabs>

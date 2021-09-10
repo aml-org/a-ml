@@ -101,7 +101,7 @@ import CodeGetter from "/components/CodeGetter";
 
 <Tabs
     groupId="languages"
-    defaultValue="java"
+    defaultValue="scala"
     values={[
         {label: 'Scala', value: 'scala'},
         {label: 'Java', value: 'java'},
@@ -125,6 +125,71 @@ import CodeGetter from "/components/CodeGetter";
     <CodeGetter
         language='ts'
         example='payload.validation.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+
+## Custom payload validation plugin
+AMF lets you create a payload validation plugin by extending the `AMFShapePayloadValidationPlugin` in Scala or Java, or
+implementing the `JsAMFPayloadValidationPlugin` in Javascript or Typescript.
+
+For example: given the following implementations of payload validation plugins:
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        fromMain={true}
+        language='scala'
+        example='CustomShapePayloadPlugin.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        fromMain={true}
+        language='java'
+        example='CustomShapePayloadValidationPlugin.java'
+    />
+</TabItem>
+</Tabs>
+
+You can now use these to validate payloads:
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='CustomPayloadValidationPluginTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='CustomPayloadValidationPluginTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='custom.payload.validation.spec.ts'
     />
 </TabItem>
 </Tabs>
