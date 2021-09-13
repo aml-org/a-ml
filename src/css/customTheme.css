@@ -69,3 +69,7 @@ html[data-theme='dark'] .header-npm-link:before {
 html[data-theme='dark'] .docusaurus-highlight-code-line {
     background-color: rgb(255, 123, 123); /* Color which works with dark mode syntax highlighting theme */
 }
+
+p > a {
+    font-weight: bolder;
+}
