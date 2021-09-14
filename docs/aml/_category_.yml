@@ -1,4 +1,4 @@
-#label: 'Tutorial'
+label: 'AML'
 #position: 2.5 # float position is supported
-position: 4
+position: 2
 collapsed: true # keep the category open by default
