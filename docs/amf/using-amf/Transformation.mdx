@@ -1,6 +1,7 @@
 ---
 id: amf_transformation
 title: Transformation
+sidebar_position: 4
 ---
 
 'Transformation' is the process of applying incremental transformations to the AMF Graph model.
@@ -28,34 +29,40 @@ Depending on your needs, you can use one of the following AMF provided transform
     - **Must** be used when converting an API to a different specification
     - Includes additional AMF-specific information to aid in specification conversion
 
-You may also implement your own pipelines.
-
-## Examples
+## Transformation examples
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import CodeGetter from "/components/CodeGetter";
 
 <Tabs
     groupId="languages"
-    defaultValue="java"
+    defaultValue="scala"
     values={[
+        {label: 'Scala', value: 'scala'},
         {label: 'Java', value: 'java'},
-        {label: 'Typescript', value: 'ts'}
+        {label: 'TypeScript', value: 'ts'}
     ]}
 >
 
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='TransformationTest.scala'
+    />
+</TabItem>
 <TabItem value="java">
     <CodeGetter
-        AMFVersion='v5'
         language='java'
         example='TransformationTest.java'
     />
 </TabItem>
 <TabItem value="ts">
     <CodeGetter
-        AMFVersion='v5'
         language='ts'
         example='transformation.spec.ts'
     />
 </TabItem>
 </Tabs>
+
+## Custom pipelines
+You may also implement your own pipelines, see the example in the code snippet: [How to create a Transformation Pipeline](../../cookbook/code_snippets#how-to-create-a-transformation-pipeline).
