@@ -1,4 +1,4 @@
 label: 'Using AMF'
 #position: 2.5 # float position is supported
-position: 3
+position: 4
 collapsed: false # keep the category open by default

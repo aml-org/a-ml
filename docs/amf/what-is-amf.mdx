@@ -1,7 +1,7 @@
 ---
-id: amf_intro
+id: what_is_amf
 title: What is AMF?
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 [AMF](https://github.com/aml-org/amf) (AML Modeling Framework) is an open-source library capable of parsing and validating AML metadata documents.
@@ -11,12 +11,12 @@ You can use AMF as a standalone command-line tool or as a library in Scala and J
 AMF source code is publicly available in the [AMF GitHub repository](https://github.com/aml-org/amf) under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## AMF project vision
-[AML](https://aml-org.github.io/aml-spec) enables you to formally describe different kinds of models, whether syntactic models—specific to languags or specifications-or semantic models specific to industries and domains.
+[AML](https://aml-org.github.io/aml-spec) enables you to formally describe different kinds of models, whether syntactic models—specific to languages or specifications-or semantic models specific to industries and domains.
 
 AMF can parse and generate descriptions of those models as sets of modular documents and store those connected descriptions into a single unified data graph.
 
 The modular design of AMF enables you to create plugins capable of parsing other metadata syntaxes not defined by AML.
-For example, the most used AMF module, the web-api module, can parse [RAML](https://raml.org/), [OAS](https://github.com/OAI/OpenAPI-Specification) (formerly Swagger), and [AsyncAPI](https://github.com/asyncapi/asyncapi) specification languages.
+For example, the most used AMF module, the web-api module, can parse [RAML](https://raml.org/), [OAS](https://www.openapis.org) (formerly Swagger), and [AsyncAPI](https://www.asyncapi.com/) specification languages.
 
 Furthermore, AMF can also validate APIs and emit them in different API languages.
 
@@ -33,7 +33,6 @@ The AMF project supports:
 - Custom parsing, resolution, and generation pipelines
 
 ## Native support
-
 AMF natively supports the following formats and semantic and syntactic models:
 
 ### Formats
@@ -54,7 +53,7 @@ You can extend these models and others using custom [AML-defined models](https:/
 ### AMF Features 
 The key features of AMF include:
 - Parsing
-- Resolution
+- Transformation
     - Stages and pipelines
 - Validation
     - Custom model constraints (WebApi)
