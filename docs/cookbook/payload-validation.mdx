@@ -4,7 +4,50 @@ title: Payload validation with AMF
 sidebar_position: 2
 ---
 
-You can use AMF to validate incoming payloads to an API already deployed and running.
+You can use AMF to validate incoming payloads to an API already deployed and running. To do so, you need to:
+
+1. Get the AMF `Shape` to use for validation
+2. Create an `AMFShapePayloadValidator` for that shape
+    1. with the `AMFElementClient`s `payloadValidatorFor()` method
+3. Validate payloads
+
+## Get the AMF `Shape` to use for validation
+When AMF parses an API it returns a `Document` that encodes a `WebApi`, which is the AMF API Contract Model based on the original API:
+
+![api to webapi model](../assets/images/other/api-to-webapi.png)
+
+You can obtain the specific `Shape` you want from this object.
+
+> The AMF [API Contract Model](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) documentation has more information about the WebApi object.
+
+## Create a `AMFShapePayloadValidator` for a specific Shape
+You can create an `AMFElementClient` from any `AMFConfiguration` simply by doing `configuration.elementClient()`.
+
+All `AMFElementClient`s have the methods `payloadValidatorFor(shape, mediatype, mode)` or `payloadValidatorFor(shape, fragment)`
+that return an `AMFShapePayloadValidator`:
+
+```scala title="AMFShapePayloadValidator interface"
+trait AMFShapePayloadValidator {
+  def validate(payload: String): Future[AMFValidationReport]
+  def validate(payloadFragment: PayloadFragment): Future[AMFValidationReport]
+  def syncValidate(payload: String): AMFValidationReport
+}
+```
+
+## Validate the payloads
+To validate payloads use the `AMFShapePayloadValidator` methods:
+- **`validate(payload: String): Future[AMFValidationReport]`**
+    - validates a given payload
+    - Returns a completable future of the `AMFValidationReport` object containing detailed information about any errors
+- **`validate(payloadFragment: PayloadFragment): Future[AMFValidationReport]`**
+    - Validates a payload from an [AMF PayloadFragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#payloadfragment)
+- **`syncValidate(payload: String): AMFValidationReport`**
+    - Validates a payload synchronously
+    - Returns the `AMFValidationReport` directly
+
+
+## Example code for payload validation
+
 For example, consider a RAML API that declares:
 
 - A `User` schema with `firstname`, `lastname`, and `age` properties
@@ -27,73 +70,14 @@ types:
         type: User
 ```
 
-To confirm that a given payload is a valid `User`, you can use AMF payload validation. To do so:
+To confirm that a given payload is a valid `User`, you can use AMF payload validation following the previous steps:
 
-1. Get the AMF payload shape
-2. Create a `PayloadValidator`
+1. Get the AMF `Shape` to use for validation
+    1. The User schema we want can be obtained from the `Request`s `Payload` object
+2. Create an `AMFShapePayloadValidator` for that shape
+    1. with the `AMFElementClient`s `payloadValidatorFor()` method
 3. Validate payloads
-
-
-## Get the AMF payload shape
-When AMF parses an API, it:
-- Returns a `Document` that encodes a `WebApi`, which is the AMF WebApi graph model of the original API
-- Abstracts the HTTP methods to `Operation` objects
-
-![api to webapi model](../assets/images/other/api-to-webapi.png)
-
-The [AMF Model Documentation](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) has more information
-on each intermediate model. The payload shape we'll use can be obtained from an `Operation` `Request` or `Response` object.
-
-## Create a `PayloadValidator`
-The payload shape (or schema) is a specific implementation of the [AnyShape](https://github.com/aml-org/amf/blob/develop/documentation/model.md#anyshape) class,
-which implements the **`ValidatorAware`** interface:
-
-```scala title="amf.client.model.domain.ValidatorAware.scala"
-trait ValidatorAware {
-
-  def payloadValidator(mediaType: String): ClientOption[PayloadValidator]
-
-  def payloadValidator(mediaType: String, exec: BaseExecutionEnvironment): ClientOption[PayloadValidator]
-
-  def payloadValidator(mediaType: String, env: Environment): ClientOption[PayloadValidator]
-
-  def parameterValidator(mediaType: String): ClientOption[PayloadValidator]
-
-  def parameterValidator(mediaType: String, exec: BaseExecutionEnvironment): ClientOption[PayloadValidator]
-
-  def parameterValidator(mediaType: String, env: Environment): ClientOption[PayloadValidator]
-}
-```
-
-This interface defines methods to create a `PayloadValidator` from an `AnyShape` class, given the `mediaType` and optional
-`BaseExecutionEnvironment` or `Environment` objects.
-
-There are two distinct payload validators:
-
-- **`payloadValidator`**
-    - Validates types, values, and constraints in strict mode
-- **`parameterValidator`**
-    - Validates query parameters, where different types may be sent as strings; fails only if there is no applicable schema
-
-
-## Validate the payloads
-To validate a payload with `PayloadValidator`, use the following methods:
-
-- **`isValid(mediaType: String, payload: String): ClientFuture[Boolean]`**
-    - Validates a payload given its media type in fail-fast mode
-    - Stops execution when it encounters any violation
-    - Used for checking payload validity
-- **`validate(mediaType: String, payload: String): ClientFuture[ValidationReport]`**
-    - Returns a `ValidationReport` object containing detailed information about any errors
-- **`validate(payloadFragment: PayloadFragment): ClientFuture[ValidationReport]`**
-    - Validates a payload from an [AMF PayloadFragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#payloadfragment)
-- **`syncValidate(mediaType: String, payload: String): ValidationReport`**
-    - Validates a payload synchronously
-    - Returns the `ValidationReport`
-
-
-### Example code for a payload validator
-The following code example validates the previously mentioned `User` schema with the payload validation methods:
+    1. with the `AMFShapePayloadValidator`s `validate()` methods
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
