@@ -30,3 +30,67 @@ AMF intends to support additional specifications as they become available.
 </div>
 </div>
 </div>
+
+## Rendering Examples
+How to render a DomainElement:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='RenderDomainElementTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='RenderDomainElementTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='render.element.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+How to render from a stream:
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='StreamedRenderTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='StreamedRenderTest.java'
+    />
+</TabItem>
+</Tabs>
