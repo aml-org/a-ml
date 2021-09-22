@@ -1,0 +1,32 @@
+---
+id: amf_rendering
+title: Rendering
+sidebar_position: 6
+---
+
+Rendering is the process of exporting an AMF [API Contract Model](/docs/amf/using-amf/amf_model) to a specific format.
+Any AMF model can be rendered as a standard JSON-LD or RDF graph. Additionally, in the case of the API Contract Model,
+it can also be exported to RAML, OAS and AsyncAPI:
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+![emission-graph](../../assets/images/amf/emision-graph.png)
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+Each rendering has limitations, as some elements may be unique to a specification and can't be represented in others.
+
+AMF intends to support additional specifications as they become available.
+
+>You can find more technical information in the related documentation about [AMF Conversion](/docs/related-docs/amf_conversion).
+
+</div>
+</div>
+</div>
