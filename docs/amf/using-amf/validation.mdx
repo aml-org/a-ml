@@ -1,0 +1,58 @@
+---
+id: amf_validation
+title: Validation
+sidebar_position: 5
+---
+
+:::info
+The legacy Custom Validation feature was removed in AMF 5.0.0. This feature will be replaced by
+an external project currently under development. Updates coming soon.
+:::
+
+Validation is the process of checking that your model complies with the constraints you've defined for it.
+If the model doesn't comply, you can determine where it's invalid and assess the severity.
+
+After you've parsed and resolved the model, you can apply different AMF validations:
+- **AMF API Contract Model validations**
+  - These are programmatic constraints that are validated against the [API Contract Model](/docs/amf/using-amf/amf_model)
+  - There are general validations, and validations specific to every API specification AMF supports
+- **AML Validations**
+  - Are generated in runtime from an AML Dialect
+
+## Validation Examples
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='ValidationTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='ValidationTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='validation.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+
+The final feature in the AMF repertoire is rendering, and you'll learn about it in the next section.
