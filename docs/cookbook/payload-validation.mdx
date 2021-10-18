@@ -1,0 +1,179 @@
+---
+id: payload_validation
+title: Payload validation with AMF
+sidebar_position: 2
+---
+
+You can use AMF to validate incoming payloads to an API already deployed and running. To do so, you need to:
+
+1. Get the AMF `Shape` to use for validation
+2. Create an `AMFShapePayloadValidator` for that shape
+    1. with the `AMFElementClient`s `payloadValidatorFor()` method
+3. Validate payloads
+
+## Get the AMF `Shape` to use for validation
+When AMF parses an API it returns a `Document` that encodes a `WebApi`, which is the AMF API Contract Model based on the original API:
+
+![api to webapi model](../assets/images/other/api-to-webapi.png)
+
+You can obtain the specific `Shape` you want from this object.
+
+> The AMF [API Contract Model](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) documentation has more information about the WebApi object.
+
+## Create a `AMFShapePayloadValidator` for a specific Shape
+You can create an `AMFElementClient` from any `AMFConfiguration` simply by doing `configuration.elementClient()`.
+
+All `AMFElementClient`s have the methods `payloadValidatorFor(shape, mediatype, mode)` or `payloadValidatorFor(shape, fragment)`
+that return an `AMFShapePayloadValidator`:
+
+```scala title="AMFShapePayloadValidator interface"
+trait AMFShapePayloadValidator {
+  def validate(payload: String): Future[AMFValidationReport]
+  def validate(payloadFragment: PayloadFragment): Future[AMFValidationReport]
+  def syncValidate(payload: String): AMFValidationReport
+}
+```
+
+## Validate the payloads
+To validate payloads use the `AMFShapePayloadValidator` methods:
+- **`validate(payload: String): Future[AMFValidationReport]`**
+    - validates a given payload
+    - Returns a completable future of the `AMFValidationReport` object containing detailed information about any errors
+- **`validate(payloadFragment: PayloadFragment): Future[AMFValidationReport]`**
+    - Validates a payload from an [AMF PayloadFragment](https://github.com/aml-org/amf/blob/develop/documentation/model.md#payloadfragment)
+- **`syncValidate(payload: String): AMFValidationReport`**
+    - Validates a payload synchronously
+    - Returns the `AMFValidationReport` directly
+
+
+## Example code for payload validation
+
+For example, consider a RAML API that declares:
+
+- A `User` schema with `firstname`, `lastname`, and `age` properties
+- A `/users` endpoint with an HTTP POST method that requires a `User` object as body parameter
+
+```yaml
+#%RAML 1.0
+title: API with Types
+types:
+  User:
+    type: object
+    properties:
+      firstname: string
+      lastname:  string
+      age:       number
+/users:
+  post:
+    body:
+      application/json:
+        type: User
+```
+
+To confirm that a given payload is a valid `User`, you can use AMF payload validation following the previous steps:
+
+1. Get the AMF `Shape` to use for validation
+    1. The User schema we want can be obtained from the `Request`s `Payload` object
+2. Create an `AMFShapePayloadValidator` for that shape
+    1. with the `AMFElementClient`s `payloadValidatorFor()` method
+3. Validate payloads
+    1. with the `AMFShapePayloadValidator`s `validate()` methods
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='PayloadValidationTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='PayloadValidationTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='payload.validation.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+
+## Custom payload validation plugin
+AMF lets you create a payload validation plugin by extending the `AMFShapePayloadValidationPlugin` in Scala or Java, or
+implementing the `JsAMFPayloadValidationPlugin` in Javascript or Typescript.
+
+For example: given the following implementations of payload validation plugins:
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        hideLink={true}
+        fromMain={true}
+        language='scala'
+        example='CustomShapePayloadPlugin.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        hideLink={true}
+        fromMain={true}
+        language='java'
+        example='CustomShapePayloadValidationPlugin.java'
+    />
+</TabItem>
+</Tabs>
+
+You can now use these to validate payloads:
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='CustomPayloadValidationPluginTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='CustomPayloadValidationPluginTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='custom.payload.validation.spec.ts'
+    />
+</TabItem>
+</Tabs>

@@ -11,22 +11,23 @@ please file an issue in the [amf repository](https://github.com/aml-org/amf/issu
 :::
 
 # What is WebAPIs conversion?
-Conversion stands for the capability of parsing a [**WebAPI**](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) from one specification vendor into an API graph and then rendering said graph as a different vendor's specification.
+Conversion stands for the capability of parsing a web API from one specification into an AMF [API Contract Model](/docs/amf/using-amf/amf_model)
+and then rendering said model as a different specification.
 It's a *cross parsing-rendering process* from a source spec to a different target spec.
 
 Different specifications can have different required fields, and the same information conceptually may not be described in the same way.
-This is why the AMF graph needs to go through a transformation process called *“Compatibility resolution”*.
+This is why the AMF API Contract Model needs to go through a transformation process called *“Compatibility resolution”*.
 
-**Compatibility resolution** is a specific resolution pipeline that is used to adapt an API graph parsed from one spec (source),
+**Compatibility resolution** is a specific resolution pipeline that is used to adapt an API Contract Model parsed from one spec (source),
 to fulfill the requirements of another spec in which it will be rendered (target).
 An example of how to use Compatibility Resolution can be seen in [Example 1](#conversion-examples).
 
 
-How does this impact the API model? For example, fields that are not required in the origin spec but required in the target spec,
+How does this impact the API Contract Model? For example, fields that are not required in the origin spec but required in the target spec,
 will be added with default values if they are not present in the origin spec.
 
 :::tip The Objective
-The objective of conversion is to **output a valid AMF model for the spec in which it will be rendered**.
+The objective of conversion is to **output a valid AMF API Contract Model for the spec in which it will be rendered**.
 It aims to **keep information loss to a minimum through a best-effort process** with some limitations.
 :::
 
@@ -63,7 +64,7 @@ These constructs can be migrated to OAS if and only if they are referenced from 
 ### Not all specs are supported
 As a consequence of the previous limitation, not all specs can be converted between each other. Currently, Async API is not supported for conversion.
 Its event-led concepts don't have a direct correspondence to REST concepts described in RAML or OAS.
-For example, how would an Async APIs `subscribe` or `binding` be in RAML? The amount of similar concepts is simply not enough to create similar graphs.
+For example, how would an Async APIs `subscribe` or `binding` be in RAML? The amount of similar concepts is simply not enough to create similar models.
 
 Supported conversions are:
 - RAML 1.0 to OAS 2.0 and vice-versa
@@ -111,7 +112,7 @@ We know and understand that the same API can be modeled and emitted in different
 
 ### Round-trip conversions
 
-When AMF adapts a model graph to be able to render it in another spec, it knows from which spec the model was parsed (spec A) and to which spec the model will be rendered (spec B).
+When AMF adapts an API Contract Model to be able to render it in another spec, it knows from which spec the model was parsed (spec A) and to which spec the model will be rendered (spec B).
 After the model is rendered that knowledge is lost as that file is just another API from spec B.
 This context loss makes it impossible to convert back again from spec B to spec A and expect exactly the same content.
 
@@ -136,7 +137,7 @@ AMF doesn't guarantee that items keep their relative order. The framework does a
 API resolution may sometimes make that lexical information useless or meaningless due to several operations that it performs.
 This is significant especially in conversion where fields may be added, removed or transformed.
 
-Why doesn't AMF guarantee relative order? AMF's underlying model is a directed cyclic graph.
+Why doesn't AMF guarantee relative order? AMF's API Contract Model is a directed cyclic graph.
 In a graph, outgoing edges from a vertex aren't ordered relatively as the only thing that matters is where those edges go, not how they are ordered. The same applies to AMF's model.
 
 ### Can I parse and render my API from a spec to the same one?
@@ -364,7 +365,7 @@ baseUri: acme-banking.com/apis
 </div>
 
 ### Code Examples
-This example (and many others) are available in the [examples github repository](https://github.com/aml-org/examples/tree/new-doc/src/test):
+This example (and many others) are available in the [examples GitHub repository](https://github.com/aml-org/examples/tree/new-doc/src/test):
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -382,23 +383,20 @@ import CodeGetter from "/components/CodeGetter";
 
 <TabItem value="scala">
     <CodeGetter
-        AMFVersion='v5'
         language='scala'
-        example='scala/ConversionTestScala.scala'
+        example='ConversionTest.scala'
     />
 </TabItem>
 <TabItem value="java">
     <CodeGetter
-        AMFVersion='v5'
         language='java'
-        example='java/ConversionTest.java'
+        example='ConversionTest.java'
     />
 </TabItem>
 <TabItem value="ts">
     <CodeGetter
-        AMFVersion='v5'
-        language='typescript'
-        example='ts/conversion.spec.ts'
+        language='ts'
+        example='conversion.spec.ts'
     />
 </TabItem>
 </Tabs>

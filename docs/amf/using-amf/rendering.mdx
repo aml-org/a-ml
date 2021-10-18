@@ -1,0 +1,96 @@
+---
+id: amf_rendering
+title: Rendering
+sidebar_position: 6
+---
+
+Rendering is the process of exporting an AMF [API Contract Model](/docs/amf/using-amf/amf_model) to a specific format.
+Any AMF model can be rendered as a standard JSON-LD or RDF graph. Additionally, in the case of the API Contract Model,
+it can also be exported to RAML, OAS and AsyncAPI:
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+![emission-graph](../../assets/images/amf/emision-graph.png)
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+Each rendering has limitations, as some elements may be unique to a specification and can't be represented in others.
+
+AMF intends to support additional specifications as they become available.
+
+>You can find more technical information in the related documentation about [AMF Conversion](/docs/related-docs/amf_conversion).
+
+</div>
+</div>
+</div>
+
+## Rendering Examples
+How to render a DomainElement:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='RenderDomainElementTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='RenderDomainElementTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='render.element.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+---
+
+How to render from a stream:
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='StreamedRenderTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='StreamedRenderTest.java'
+    />
+</TabItem>
+</Tabs>
