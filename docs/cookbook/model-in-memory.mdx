@@ -1,0 +1,58 @@
+---
+id: model_in_memory
+title: Creating an AMF model in memory
+sidebar_position: 1
+---
+
+AMF can also be used to create APIs in your code, in a fluent and descriptive way.
+
+You can use an [AMF WebApi](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) in memory to:
+
+- Edit an already parsed API
+- Power a visual API designer
+- Create programmatic API tests
+- Debug the WebApi Graph model
+
+### Create a WebApi with AMF
+The following code example creates a generic "Music Service API" with the following endpoints:
+
+- `/me`: Retrieves a user's profile
+- `/me/playlists`: Retrieves a user's playlists
+- `/albums`: Retrieves a specific album or a list of albums by their IDs
+
+For the purposes of this API, all responses are returned as strings,
+but you can further specify requests and responses by defining a schema for an album, playlist, or user.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='ModelBuilderTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='ModelBuilderTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='model.builder.spec.ts'
+    />
+</TabItem>
+</Tabs>

@@ -1,0 +1,395 @@
+---
+id: amf_conversion
+title: AMF Conversion
+---
+
+:::caution
+The functionality expressed in this documentation is currently a work in progress.
+If any bugs are found that do not satisfy these functionalities,
+please file an issue in the [amf repository](https://github.com/aml-org/amf/issues).
+:::
+
+# What is WebAPIs conversion?
+Conversion stands for the capability of parsing a [WebAPI](https://github.com/aml-org/amf/blob/develop/documentation/model.md#webapi) from one specification vendor into an API graph and then rendering said graph as a different vendor's specification.
+It's a *cross parsing-rendering process* from a source spec to a different target spec.
+
+Different specifications can have different required fields, and the same information conceptually may not be described in the same way.
+This is why the AMF graph needs to go through a transformation process called *“Compatibility resolution”*.
+
+[Compatibility resolution](../AMF/Using%20AMF/amf_resolution#pipelines) is a specific resolution pipeline that is used to adapt an API graph parsed from one spec (source),
+to fulfill the requirements of another spec in which it will be rendered (target).
+An example of how to use Compatibility Resolution can be seen in [Example 1](#conversion-examples).
+
+
+How does this impact the API model? For example, fields that are not required in the origin spec but required in the target spec,
+will be added with default values if they are not present in the origin spec.
+
+:::tip The Objective
+The objective of conversion is to **output a valid AMF model for the spec in which it will be rendered**.
+It aims to **keep information loss to a minimum through a best-effort process** with some limitations.
+:::
+
+
+## Conversion Goals
+Conversion resolution has several goals:
+- Make transitioning to/from OAS to RAML easier for the end user
+- Give the user an approximate view of what their API in another spec would look like
+- Let tools use specs that they don't directly support
+- Take advantage of spec-specific tooling
+    - for example, converting to OAS to use [swagger-ui](https://swagger.io/tools/swagger-ui) in a microservice or using a trusted client-spec generator that only works with RAML
+
+
+
+# Conversion limitations
+The AMF team, having listened to other team's needs, is the one that dictates how the model is adapted to fit other specs:
+- If there is 1:1 information type mapping between specs it will be converted
+- If there are missing mandatory fields, a default value will be added
+  The default's value is opinionated, meaning that there may be more than one possible value, and we choose which one we use
+- Anything else is omitted
+
+
+### Concepts present in a spec but nonexistent in another aren't supported
+Sometimes a spec may introduce concepts that don't exist in other specs. There are many cases coming from RAML to OAS, some are:
+- Datatype Fragments
+- Libraries
+- Resource Types and Traits
+- Overlays and Extensions
+
+These concepts cannot be converted to OAS as they do not exist in that spec.
+These constructs can be migrated to OAS if and only if they are referenced from a root Api document.
+
+
+### Not all specs are supported
+As a consequence of the previous limitation, not all specs can be converted between each other. Currently, Async API is not supported for conversion.
+Its event-led concepts don't have a direct correspondence to REST concepts described in RAML or OAS.
+For example, how would an Async APIs `subscribe` or `binding` be in RAML? The amount of similar concepts is simply not enough to create similar graphs.
+
+Supported conversions are:
+- RAML 1.0 to OAS 2.0 and vice-versa
+- RAML 1.0 to OAS 3.0 and vice-versa
+
+
+### Information may be lost
+Original information that is incompatible with the target spec may be lost.
+This is also a consequence of having concepts present in source spec that don't exist in the target spec.
+For example OAS 3 links have no way of being migrated into RAML and will not be rendered in the converted RAML spec.
+
+In the next example, not all the RAML  `documentation` nodes can be migrated to OAS 3.0 `externalDocs` nodes.
+In fact, only the first `documentation` node is kept while the others are lost.
+As the RAML 1.0 `documentation` does not define an url like OAS 3.0's does, an url node is defined with an “empty” url.
+
+
+
+```yaml title="RAML to OAS 3.0 documentation conversion example - RAML code"
+documentation:
+    - title: Test Console and Mocking Service
+    content: |
+        Welcome to the \_Test API\_ Documentation. The \_Test API\_
+        allows you to test console and mocking service features
+        [integration libraries](https://mulesoft.com)
+    - title: Legal
+    content: !include docs/api.md
+```
+
+```yaml title="RAML to OAS 3.0 documentation conversion example - OAS code"
+externalDocs:
+    url: http://
+    description: |
+        Welcome to the \_Test API\_ Documentation. The \_Test API\_
+        allows you to test console and mocking service features
+        [integration libraries](https://mulesoft.com)
+```
+
+### Default conversion is not customizable
+Each spec conversion is implemented as a different [*Resolution Pipeline*](../AMF/Using%20AMF/amf_resolution), and provided pipelines are not modifiable.
+Thus, the provided default conversion functionality is not customizable.
+However, a different conversion resolution can be implemented by creating a new *ResolutionPipeline* with the required conversion stages.
+
+We know and understand that the same API can be modeled and emitted in different ways following different practices, but it's not possible to cover them all.
+
+
+### Round-trip conversions
+
+When AMF adapts a model graph to be able to render it in another spec, it knows from which spec the model was parsed (spec A) and to which spec the model will be rendered (spec B).
+After the model is rendered that knowledge is lost as that file is just another API from spec B.
+This context loss makes it impossible to convert back again from spec B to spec A and expect exactly the same content.
+
+Previously, AMF attempted to reduce this information lost in conversion by rendering constructs that could only be parsed by them.
+This was often done with special API constructs given by the specs and recognized by AMF:
+- [*annotations*](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md#annotations) in RAML, written as `amf-.*`
+- [*specification extensions*](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#specification-extensions) in OpenApi, written as `x-amf-.*`
+
+These attempts to keep as much information possible have two main drawbacks:
+- AMF can't know whether some content in the rendered spec, like annotations, was rendered for compatibility purposes, or it is something that a spec author wanted to have in the spec
+- All recognizable attributes that AMF can write in the spec to identify it as coming from a compatibility context can be emulated by a spec designer with a modeling intention and are therefore invalid as conversion identifiers
+
+
+# Common Questions
+
+### Why don't we use annotations to render incompatible content?
+Incompatible content isn't rendered in an annotation because it goes against one of the goals of conversion: take advantage of tooling in a specific spec.
+Annotation-rendered incompatible content will not be processed by tooling with the intent it was added to the spec, thus rendering that content useless.
+
+### Why have some items in the spec lost their relative order?
+AMF doesn't guarantee that items keep their relative order. The framework does a best-effort of keeping order by reusing the spec's lexical information.
+API resolution may sometimes make that lexical information useless or meaningless due to several operations that it performs.
+This is significant especially in conversion where fields may be added, removed or transformed.
+
+Why doesn't AMF guarantee relative order? AMF's underlying model is a directed cyclic graph.
+In a graph, outgoing edges from a vertex aren't ordered relatively as the only thing that matters is where those edges go, not how they are ordered. The same applies to AMF's model.
+
+### Can I parse and render my API from a spec to the same one?
+You shouldn't resolve the model with a compatibility pipeline as these pipelines are just to move between different specifications.
+
+To render to the same specification you shouldn't apply a resolution unless you want the model to also be resolved (apply traits, resource types, apply inheritance and links, solve parameters, etc).
+
+Although you can cycle (parse and render) your API using AMF you should reconsider why you are doing it and see if the framework has the capabilities of achieving what you seek in a different, more useful way.
+
+### Why do I have to use conversion resolution? Can't Renderers know how to render correctly?
+Rendering has to render any model that is passed to the Renderers, it can't modify said model.
+This is why conversion is done in a resolution stage (using a specific pipeline for compatibility), it is the only place where the model can be transformed before rendering.
+
+
+# Conversion Examples
+### RAML 1.0 converted to OAS 2.0
+In this example we use AMF to parse a RAML API, resolve it with CompatibilityPipeline and then render the API in OAS 2.0 for a full conversion.
+Notice some changes made by the conversion to render a compatible target API:
+- RAML has `uriParameters` but OAS doesn't, so each URI parameter like `{customer_id}` has been changed to an OAS path parameter
+- The `responses` object has no descriptions because they're not required in RAML, but in OAS they are, so an empty description has been added
+
+export const myStyle = {
+    padding: "15px 5px",
+};
+
+<div className="container">
+<div className='row'>
+<div style={myStyle} className='col col--6'>
+
+```yaml title="generic API in RAML 1.0 (source API)"
+#%RAML 1.0
+
+title: ACME Banking HTTP API
+version: 1.0
+mediaType: application/json
+
+baseUri: acme-banking.com/apis
+
+/customers:
+  /{customer_id}:
+    uriParameters:
+      customer_id: string
+    get:
+      description: Returns Customer data
+      responses:
+        200:
+          body:
+            application/json:
+    delete:
+      description: Removes a Customer from the system
+    /accounts:
+      get:
+        description: Returns a collection accounts
+        responses:
+          200:
+            body:
+              application/json:
+    /cards:
+      /debit:
+        get:
+          description: Returns a collection of cards
+          responses:
+            200:
+              body:
+                application/json:
+        post:
+          description: Requests the creation of a new DebitCard
+          body:
+            application/json:
+
+```
+
+</div>
+<div style={myStyle} className='col col--6'>
+
+```json title="converted API in OAS 2.0 (target API)"
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ACME Banking HTTP API",
+    "version": "1.0"
+  },
+  "host": "acme-banking.com",
+  "basePath": "/apis",
+  "paths": {
+    "/customers": {},
+    "/customers/{customer_id}": {
+      "get": {
+        "description": "Returns Customer data",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      },
+      "delete": {
+        "description": "Removes a Customer from the system",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/customers/{customer_id}/accounts": {
+      "get": {
+        "description": "Returns a collection accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/customers/{customer_id}/cards": {
+      "parameters": [
+        {
+          "name": "customer_id",
+          "required": true,
+          "in": "path",
+          "type": "string"
+        }
+      ]
+    },
+    "/customers/{customer_id}/cards/debit": {
+      "get": {
+        "description": "Returns a collection of cards",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {}
+          }
+        }
+      },
+      "post": {
+        "description": "Requests the creation of a new DebitCard",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customer_id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+</div>
+</div>
+</div>
+
+### Code Examples
+This example (and many others) are available in the [examples github repository](https://github.com/aml-org/examples/tree/new-doc/src/test):
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="java"
+    values={[
+        {label: 'Java', value: 'java'},
+        {label: 'JavaScript', value: 'js'}
+    ]}
+>
+
+<TabItem value="java">
+    <CodeGetter
+        AMFVersion='v4'
+        language='java'
+        example='java/ConversionTest.java'
+    />
+</TabItem>
+<TabItem value="js">
+    <CodeGetter
+        AMFVersion='v4'
+        language='js'
+        example='js/conversion.test.js'
+    />
+</TabItem>
+</Tabs>

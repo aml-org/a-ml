@@ -1,0 +1,70 @@
+---
+id: amf_setup
+title: Add AMF to your project
+sidebar_position: 1
+---
+
+To run AMF in your application, you'll need add AMF to your dependencies and then configure AMF to use it in your code.
+
+
+## Download AMF artifacts
+You can download the necessary AMF artifacts from:
+-   [Maven](https://repository-master.mulesoft.org/nexus/content/repositories/releases/com/github/amlorg/amf-api-contract_2.12)
+-   [NPM](https://www.npmjs.com/package/amf-client-js)
+
+
+## Add AMF to your dependencies
+The following example shows how to add AMF to your project using Gradle, Maven, or NPM.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+    groupId="framework"
+    defaultValue="gradle"
+    values={[
+        {label: 'Gradle', value: 'gradle'},
+        {label: 'Maven', value: 'maven'},
+        {label: 'NPM', value: 'npm'}
+    ]}
+>
+<TabItem value="gradle">
+
+```js
+// add mulesoft repository
+repositories {
+    maven {
+        url 'https://repository-master.mulesoft.org/nexus/content/repositories/releases'
+    }
+}
+dependencies {
+    implementation 'com.github.amlorg:amf-api-contract_2.12:5.y.z'
+}
+```
+
+</TabItem>
+<TabItem value="maven">
+
+```xml
+<dependency>
+    <groupId>com.github.amlorg</groupId>
+    <artifactId>amf-api-contract_2.12</artifactId>
+    <version>5.y.z</version>
+</dependency>
+```
+
+</TabItem>
+<TabItem value="npm">
+
+NPM or Yarn:
+```bash
+$ npm install --save amf-client-js #using npm
+$ yarn add --save amf-client-js #using yarn
+```
+
+
+</TabItem>
+</Tabs>
+
+
+NOTE: you may use the `-SNAPSHOT` versions of the artifacts at your own risk since those snapshot versions may contain breaking changes.

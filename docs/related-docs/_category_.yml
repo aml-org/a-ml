@@ -1,0 +1,4 @@
+label: 'Related Docs'
+#position: 2.5 # float position is supported
+position: 5
+collapsed: true # keep the category open by default

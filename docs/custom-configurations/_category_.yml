@@ -1,0 +1,4 @@
+label: 'Customizable configurations'
+#position: 2.5 # float position is supported
+position: 4
+collapsed: true # keep the category open by default

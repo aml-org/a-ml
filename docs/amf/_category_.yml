@@ -1,0 +1,4 @@
+label: 'AMF'
+#position: 2.5 # float position is supported
+position: 1
+collapsed: false # keep the category open by default

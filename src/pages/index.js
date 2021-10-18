@@ -463,7 +463,7 @@ const AmlBlocks = () =>
                         Vocabularies</a>
                 </div>
                 <div className="col-md-6 col-sm-6 col-lg-6 right-txt">
-                    <p><a href="https://aml-org.github.io/docbook/overview_aml.html">AML (Anything Modeling
+                    <p><a href="/docs/aml/aml">AML (Anything Modeling
                         Language)</a> can be used to describe existing YAML/JSON metadata formats or design new
                         ones,
                         providing common semantics and linking the information into a single unified graph of
