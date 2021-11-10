@@ -120,7 +120,7 @@ module.exports = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'AMF v5.0.0-beta',
+              label: 'AMF v5.x.x',
               path: '',
             },
             '4.x.x': {
