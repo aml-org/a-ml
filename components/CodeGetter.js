@@ -7,8 +7,8 @@ const v4 = {
 }
 
 const v5 = {
-    testsUrl: 'https://raw.githubusercontent.com/aml-org/examples/master/AMF5/src/test/',
-    mainUrl: 'https://raw.githubusercontent.com/aml-org/examples/master/AMF5/src/main/',
+    testsUrl: 'https://raw.githubusercontent.com/aml-org/examples/semantic-json-schema/AMF5/src/test/',
+    mainUrl: 'https://raw.githubusercontent.com/aml-org/examples/semantic-json-schema/AMF5/src/main/',
     scala: 'scala/scalaPlatform/',
     java: 'java/javaPlatform/',
     ts: 'ts/',

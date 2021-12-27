@@ -1,0 +1,128 @@
+---
+id: semantic_json_schema
+title: Semantic JSON Schema
+sidebar_position: 3
+---
+
+:::caution
+The functionality expressed in this documentation is currently in alpha stage.
+:::
+
+# What is Semantic JSON Schema?
+Semantic JSON Schema is a feature that generates automatically an AML Dialect based on a JSON Schema input.
+
+## How does it work?
+Semantic JSON Schema generates NodeMappings in an AML Dialect based on the structure of an input JSON Schema.
+This transformation is automatic and allows you to be abstracted of how to an AML Dialect should be written, you only
+need to know how to write a JSON Schema.
+
+You also have the possibility to extend the JSON Schema adding a [JSON-LD @context](https://www.w3.org/TR/json-ld/#the-context). This gives the functionality of
+add semantic information to your JSON Schema with the following optional fields:
+- @base: a string with IRI format. Used to set the base IRI against which to resolve those relative IRI references which are otherwise interpreted relative to the document.
+- @vocab: a string with IRI format. Used to define a common prefix IRI. It is translated as an external reference to a vocabulary in the AML Dialect.
+- @type: a string with IRI format. Used to set the type of a node or the datatype of a typed value. It overrides the type of the mapping in the AML Dialect.
+- @characteristics: an array of strings with IRI format. This is a custom field, it does not exist in JSON-LD. Used to define an IRI that will be translated in a PropertyTerm or ClassTerm in the AML Dialect. Useful to add semantic information to schemas or properties.
+- Terms: a map entry of key and value, the key is a string that identifies the prefix and the value is a string with IRI format. Generally used to define prefixes that will be used in the document, defining @characteristics for example, with a compact IRI (prefix:suffix).
+
+```json
+
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "@context": {
+    "@base": "http://test.com/adocument.jsonld",
+    "@vocab": "http://test.com/vocab#",
+    "security": "https://test.com/security#"
+  }
+}
+
+```
+
+The @context accepts all the field at root level, but you also could define a @context to specify @characteristics at any element level.
+
+```json
+
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "@context": {
+    "@base": "http://test.com/adocument.jsonld",
+    "@vocab": "http://test.com/vocab#",
+    "security": "https://test.com/security#"
+  },
+  "title": "Some security thing",
+  "type": "object",
+  "required": [
+    "key",
+    "info"
+  ],
+  "properties": {
+    "key": {
+      "@context": {
+        "@characteristics":  [
+          "security:sensitive"
+        ]
+      },
+      "type": "string"
+    },
+    "info": {
+      "type": "integer"
+    }
+  }
+}
+
+```
+
+The @context could be defined inlined, as in the previous examples or it could be also a link to an external file.
+
+```json
+
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "@context": "https://test.com/contexts/some-remote-context.json"
+}
+
+```
+
+## Limitations
+AML is a language that put their focus on the structure and the information of the data. JSON Schema, on the other hand, is more focused on the validation than in the structure of the data.
+this difference results in some of the JSON Schema structures not being supported or meaningless in AML.
+This is a list of non-compatible structures:
+- 'anyOf': having ambiguity when mapping an instance to an AML dialect structure is meaningless. For this reason, it is recommended to replace its use with 'oneOf'.
+- 'not': is not possible to define the structure of something without the structure.
+
+## How to use it?
+The following code are examples on how to parse the Semantic JSON Schema feature.
+The first test shows how to generate an AML Dialect from a JSON Schema and the second one adds the validations of a JSON instance with the generated AML Dialect.
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='JSONSchemaToDialectTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='JSONSchemaToDialectTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='json.schema.dialect.spec.ts'
+    />
+</TabItem>
+</Tabs>
