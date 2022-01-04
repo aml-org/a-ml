@@ -22,7 +22,8 @@ module.exports = {
     hideableSidebar: true,
     // used for crawling site and generating searching with DocSearch
     algolia: {
-      apiKey: 'f627767b6ec831d4a1782bf7207f845e',
+      appId: 'JU1FJBORFR',
+      apiKey: '2c4fc441ba3e6d5dc89edc614e565dc8',
       indexName: 'a-ml'
     },
     prism: {
