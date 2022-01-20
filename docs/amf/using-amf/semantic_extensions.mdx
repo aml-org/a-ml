@@ -1,0 +1,150 @@
+---
+id: semantic_extensions
+title: Writing, Applying and Reading Semantic Extensions
+---
+
+## What you'll learn
+- What a Semantic Extension is
+- Writing extensions and applying them in an API spec.
+- Processing Semantic Extensions in your code.
+- Reading an extension from the Object Oriented interface
+
+## What a Semantic Extension is
+
+"Semantic Extensions" is a mechanism to extend the semantic domain of an API specification like [RAML](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md#annotations) 
+or [OpenApi](https://swagger.io/docs/specification/openapi-extensions/).
+
+We use [AML](/docs/aml/aml) to define mappings that will be describe the AST structure used to parse the nodes that extend the domain of the source specification. Also, it allows map
+the AST structure to *semantic terms*.
+
+We identify such nodes or extension points by using *annotations* (also called *spec extensions*).
+
+### Writing a Semantic Extension
+
+To write a semantic extension we need to:
+- Create an AML Dialect document
+- Write an "AnnotationMapping" node under the "annotationMappings" key. This describes the structure that we expect the value of the semantic-extension to have.
+- Declare an extension under the "extensions" node and link it to the AnnotationMapping we wrote.
+
+```yaml
+#%Dialect 1.0
+dialect: Repository object extensions
+version: 1.0
+
+external:
+  apiContract: "http://a.ml/vocabularies/apiContract#"
+
+documents:
+  root:
+    declares: {}
+
+annotationMappings:
+  DeprecationMapping:
+    domain: apiContract.EndPoint
+    propertyTerm: apiContract.deprecated
+    range: Deprecation
+
+nodeMappings:
+  Deprecation:
+    mapping:
+      replaceFor:
+        range: string
+        mandatory: true
+      message:
+        range: string
+        mandatory: true
+
+extensions:
+  deprecated: DeprecationMapping
+```
+#### Examining the "DeprecationMapping" annotation
+
+AnnotationMappings behave like [PropertyMappings](https://github.com/aml-org/aml-spec/blob/master/dialects.md#property-mappings) except that declaring "mapKey" and "mapValue" is not allowed.
+
+The "DeprecationMapping" AnnotationMapping has 3 fields:
+
+- **domain**: instructs the AMFParser the models that may contain "semantic-extensions". This node's value should match a value of the models "@type" array. To see the possible AMF models to extend see: [AMFs API Contract Model documentation](https://github.com/aml-org/amf/blob/develop/documentation/model.md).
+- **propertyTerm**: uri used to semantically describe the parsed extension model. This value will be used in the model to access the extension value. This access is described in the example.
+- **range**: desired structure of the semantic-extension's value. This can be a scalar value (string, integer, etc.) or a NodeMapping.
+
+#### Examining the "deprecated" extension
+
+Declarations under the "extensions" node expose an AnnotationMapping under a specific name, in this case "deprecated". An API Spec author or Dialect will be able to use the semantic-extension
+under the "deprecated" name.
+
+### Applying a Semantic Extension in your API
+
+The "deprecated" extension can now be used under "Endpoint" models in the API. An easy way of getting familiar as to where to write the extension is to use the [AMF Model Playground](/docs/AMF/amf_playground).
+An extension that isn't under the nodes allowed in the "AnnotationMapping" will be parsed as a "CustomDomainProperty".
+
+```yaml
+openapi: 3.0.3
+info:
+  title: "Semantic Extension example API"
+  version: 1.0.0
+paths:
+  /v1/paginated:
+    description: "Deprecated endpoint"
+    # Using my "deprecated" semantic extension to add semantic information to the EndPoint
+    x-deprecated:
+      replaceFor: "v2/paginated"
+      message: "Deprecated because the response type has changed."
+    get:
+      responses:
+        "200":
+          description: "An annotated response object with the pagination annotation."
+          # As the AnnotationMapping doesn't apply to the "apiContract.Response" domain then this node will be parsed as a CustomDomainProperty
+          x-deprecated:
+            replaceFor: "v3/paginated"
+            message: "Deprecated because the response type has changed."
+```
+
+### Processing Semantic Extensions in Code
+
+Using Semantic Extensions in code requires:
+- Registering the AML Dialect where the extension is defined in an AMFConfiguration
+- Parsing the API . See [Parsing](/amf/parsing) for more info.
+- Transforming it with DEFAULT, EDITING or CACHE pipeline. See [Transformation](/amf/transformation) for more info.
+
+This is show in the [Semantic Extension Examples](#semantic-extension-usage-code-examples)
+
+### Reading an extension from the Object Oriented interface
+
+Reading a Semantic Extension is not as straightforward as reading "fixed" properties in an AMF model. To read an extension, the "Graph interface" should be used alongside the expanded URI used 
+as "propertyTerm" value. This is show in the [Semantic Extension Examples](#semantic-extension-usage-code-examples)
+
+
+### Semantic Extension Usage Code Examples
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='SemanticExtensionsTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='SemanticExtensionsTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='semantic.extensions.spec.ts'
+    />
+</TabItem>
+</Tabs>
