@@ -4,11 +4,14 @@ services:
   docusaurus:
     build: .
     ports:
-      - 3000:3000
-      - 35729:35729
+      - "3000:3000"
+      - "35729:35729"
     volumes:
       - ./components:/app/components
       - ./docs:/app/docs
+      - ./versioned_docs:/app/versioned_docs
+      - ./versioned_sidebars:/app/versioned_sidebars
+      - ./versions.json:/app/versions.json
       - ./src:/app/src
       - ./static:/app/static
       - ./babel.config.js:/app/babel.config.js
