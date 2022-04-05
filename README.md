@@ -3,7 +3,7 @@
 > This repository contains the source code for the a.ml website developed in React, including the AML and AMF documentation
 
 ## Requirements
-* Node.js version >= 12.13.0 or above
+* Node.js version >= 14.8.0 or above
 
 ## Running locally
 1. Pull the code locally:
