@@ -4,13 +4,13 @@ title: Parsing with AMF
 sidebar_position: 3
 ---
 
-AMF can parse [AML dialects](https://aml-org.github.io/aml-spec/dialects) and the following API specifications:
+AMF can parse [AML dialects](https://aml-org.github.io/aml-spec/dialects), [JSON Schema](https://json-schema.org/) ([check supported drafts](/docs/related-docs/json_schema_document)), and the following API specifications:
 
 - [RAML 0.8](https://github.com/raml-org/raml-spec/blob/master/versions/raml-08/raml-08.md)
 - [RAML 1.0](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md)
 - [OAS 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
 - [OAS 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md)
-- [AsyncAPI 2.0](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md)
+- [AsyncAPI 2.0](https://github.com/asyncapi/spec/blob/2.0.0/versions/2.0.0/asyncapi.md)
 
 The following section explains the basics of parsing, and the example shows how to parse each specification in Scala, Java or Typescript.
 
@@ -68,7 +68,7 @@ and the `BaseUnitClient` from that configuration.
 You can use the following parsing methods:
 - If the API is a file use `client.parse(path)`, providing the path to it
 - If the API is a string use `client.parseContent(string, mediatype)` providing the API as a string
-    - the mediatype is an optional parameter, if it's not present AMF will try to guess it
+- the mediatype is an optional parameter, if it's not present AMF will try to guess it
 
 > Refer to the [AMF Configuration and Client objects](amf_configuration)
 for more information on how to choose the configuration and client to use.
@@ -153,6 +153,42 @@ The following code are examples on how to parse AML Vocabularies, Dialects and D
     <CodeGetter
         language='ts'
         example='aml.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+### JSON Schema
+The following code are examples on how to parse a JSON Schema:
+
+>For more information about JSON Schema support go to the [JSON Schema section of the documentation](/docs/related-docs/json_schema_document).
+
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='JSONSchemaParsingTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='JSONSchemaParsingTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='json.schema.parsing.ts'
     />
 </TabItem>
 </Tabs>
