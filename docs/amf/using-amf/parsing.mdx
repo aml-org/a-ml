@@ -11,6 +11,7 @@ AMF can parse [AML dialects](https://aml-org.github.io/aml-spec/dialects), [JSON
 - [OAS 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
 - [OAS 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md)
 - [AsyncAPI 2.0](https://github.com/asyncapi/spec/blob/2.0.0/versions/2.0.0/asyncapi.md)
+- [GraphQL](https://spec.graphql.org/June2018/)
 
 The following section explains the basics of parsing, and the example shows how to parse each specification in Scala, Java or Typescript.
 
@@ -85,7 +86,7 @@ MacOS and Unix:
 - Relative path: `file://api.raml`
 
 ### API Contract Model parsing
-The following code are examples on how to parse APIs:
+The following code are examples on how to parse APIs (non GraphQL):
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -188,7 +189,42 @@ The following code are examples on how to parse a JSON Schema:
 <TabItem value="ts">
     <CodeGetter
         language='ts'
-        example='json.schema.parsing.ts'
+        example='json.schema.parsing.spec.ts'
+    />
+</TabItem>
+</Tabs>
+
+
+### GraphQL
+The following code are examples on how to parse a GraphQL API:
+
+
+<Tabs
+    groupId="languages"
+    defaultValue="scala"
+    values={[
+        {label: 'Scala', value: 'scala'},
+        {label: 'Java', value: 'java'},
+        {label: 'TypeScript', value: 'ts'}
+    ]}
+>
+
+<TabItem value="scala">
+    <CodeGetter
+        language='scala'
+        example='GraphQLParsingTest.scala'
+    />
+</TabItem>
+<TabItem value="java">
+    <CodeGetter
+        language='java'
+        example='GraphQLParsingTest.java'
+    />
+</TabItem>
+<TabItem value="ts">
+    <CodeGetter
+        language='ts'
+        example='graphql.parsing.spec.ts'
     />
 </TabItem>
 </Tabs>
