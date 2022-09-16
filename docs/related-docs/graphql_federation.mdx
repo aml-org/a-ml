@@ -1,0 +1,91 @@
+---
+id: graphql_federation
+title: GraphQL Federation
+sidebar_position: 5
+---
+
+## Summary
+AMF supports APIs defined as GraphQL Subgraph APIs compliant with the [Apollo Federation v2 spec](https://github.com/apollographql/federation/blob/b85e307f9c471864a799f1b05e28ce7c24bc05b7/docs/source/federation-spec.md)
+
+:::info
+The *Apollo Federation v2 spec* has been revised since the revision mentioned in the above link.
+
+No explicit mentions on backwards compatibility between Apollo Federation v2 spec revisions are mentioned in the Apollo documentation.
+_We assume Apollo Federation v2 spec revisions are backwards compatible_.
+:::
+
+To get started with Federation you should use the [GraphQLFederationConfiguration](https://github.com/aml-org/amf/blob/master/amf-graphql/shared/src/main/scala/amf/graphqlfederation/client/scala/GraphQLFederationConfiguration.scala)
+
+## AMF Federation Model
+The AMF Federation model contains the required information to Federate both GraphQL and Rest APIs. In GraphQL this comes in the form of federating [Shapes](https://github.com/aml-org/amf/blob/master/documentation/model.md#shape)
+while in REST APIs federating [Operations](https://github.com/aml-org/amf/blob/master/documentation/model.md#operation).
+
+Below is a list of the relevant model parts. Please refer to the linked documentation for each case for more information.
+
+#### [Key](https://github.com/aml-org/amf/blob/master/documentation/model.md#key)
+Contains the information from keys that identify federated Shapes or Operations
+(`@key` directive in Apollo, read "Note on Apollo __FieldSet_ DSL")
+
+#### [FederationMetadata](https://github.com/aml-org/amf/blob/master/documentation/model.md#customdomainproperty)
+Contains different kinds of metadata from a federated Shape or Operation. Each of this has it own federation metadata,
+[ShapeFederationMetadata](https://github.com/aml-org/amf/blob/master/documentation/model.md#shapefederationmetadata) and
+[OperationFederationMetadata](https://github.com/aml-org/amf/blob/master/documentation/model.md#operationfederationmetadata) respectively.
+
+#### Some properties:
+* http://a.ml/vocabularies/federation#isStub: Indicates if an element is a stub from an external component from another component of the federated graph
+* http://a.ml/vocabularies/federation#requires: External properties (by path) required to retrieve data from this property during federation
+(`@requires` directive in Apollo, read "Note on Apollo __FieldSet_ DSL")
+* http://a.ml/vocabularies/federation#provides: External properties (by path) that can be provided by this graph during federation
+(`@provides` directive in Apollo, read "Note on Apollo __FieldSet_ DSL")
+
+#### Note on Apollo __FieldSet_ DSL
+Apollo allows to use the [Value](https://spec.graphql.org/October2021/#Value) GraphQL construct to reference fields that
+make up a key. This construct is a tree. In AMF such construct is flattened and represented as a sequence of
+[PropertyShapePath](https://github.com/aml-org/amf/blob/master/documentation/model.md#propertyshapepath) where
+each PropertyShapePath represents the traversal from the root of the tree to each of the leaf nodes.
+
+
+## Parsing support
+
+AMF supports parsing APIs defined as GraphQL Subgraphs compliant with the [Apollo Federation v2 spec](https://github.com/apollographql/federation/blob/b85e307f9c471864a799f1b05e28ce7c24bc05b7/docs/source/federation-spec.md).
+Federation directives are supported out of the box __without having to declare them nor import them with the `@link` directive__.
+
+Federation directives are parsed differently from other directives. Non-federation directive applications will be parsed as [DomainExtensions](https://github.com/aml-org/amf/blob/master/documentation/model.md#domainextension)
+and their corresponding declaration as [CustomDomainProperty](https://github.com/aml-org/amf/blob/master/documentation/model.md#customdomainproperty). Federation directives are parsed instead as part of the __Federation model__.
+
+### Supported directives
+* `@external`
+* `@requires`
+* `@provides`
+* `@key`
+* `@shareable`
+* `@inaccessible`
+* `@override`
+
+### Non parsed directives
+These directives __do not require declaration__. Parsing these __will produce no effect on the output AMF model__.
+* `@link`
+
+### Not supported directives
+These directives __require declaration__ despite being part of the [Apollo Federation v2 spec](https://github.com/apollographql/federation/blob/b85e307f9c471864a799f1b05e28ce7c24bc05b7/docs/source/federation-spec.md).
+Support for these will be added in subsequent AMF releases.
+
+* `@tag`
+* `@composeDirective`
+* `@extends`: AMF supports the built in `extend` GraphQL keyword so it is not necessary to use this directive
+
+## Transformation support
+The [GraphQLFederationConfiguration](https://github.com/aml-org/amf/blob/master/amf-graphql/shared/src/main/scala/amf/graphqlfederation/client/scala/GraphQLFederationConfiguration.scala)
+provides the following transformation pipelines:
+* __Editing__: transforms a parsed GraphQL Subgraph API into the AMF canonical model __with ID__ shortening
+* __Cache__: transforms a parsed GraphQL Subgraph API into the AMF canonical model __without__ ID shortening
+* __Introspection__: transforms a parsed GraphQL Subgraph API into the model obtained from performing introspection on a
+running instance of such GraphQL Subgraph API. Follows the steps under the [`buildSubgraphSchema`](https://github.com/apollographql/federation/blob/b85e307f9c471864a799f1b05e28ce7c24bc05b7/docs/source/subgraphs.mdx#4-generate-the-subgraph-schema) function in Apollo
+
+## Validation support
+Federation introduces stricter validations then GraphQL. The [GraphQLFederationConfiguration](https://github.com/aml-org/amf/blob/master/amf-graphql/shared/src/main/scala/amf/graphqlfederation/client/scala/GraphQLFederationConfiguration.scala)
+is capable of validating such stricter constraints. Examples of these are:
+* `@key` directive must point to existing properties
+* Fields targeted by `@requires` should be annotated as `@external`
+* Fields targeted by `@provides` should be annotated as `@external`
+* Cannot declare types nor fields with reserved federation names like *_FieldSet*, *_Entity*, *_Service*, *_entities* and *_service*
