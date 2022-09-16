@@ -19,7 +19,11 @@ module.exports = {
     ]
   ],
   themeConfig: {
-    hideableSidebar: true,
+    docs: {
+      sidebar: {
+        hideable: true
+      }
+    },
     // used for crawling site and generating searching with DocSearch
     algolia: {
       appId: 'JU1FJBORFR',
