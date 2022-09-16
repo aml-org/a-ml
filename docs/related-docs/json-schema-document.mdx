@@ -1,0 +1,60 @@
+---
+id: json_schema_document
+title: JSON Schema Document Support
+sidebar_position: 4
+---
+
+# JSON Schema Document Support
+
+:::info about restrictions
+These requirements, validations, and restrictions apply only for JSON Schemas parsed with [the new JSON Schema configuration](/docs/amf/using-amf/amf_parsing).
+:::
+
+## Drafts supported
+- JSON Schema draft 3
+- JSON Schema draft 4
+- JSON Schema draft 7
+- JSON Schema draft 2019-09 (partially supported, more info in [this section](json_schema_draft_2019_09_to_draft_7))
+
+## Requirements
+The input JSON Schema MUST:
+- Contain the `$schema` keyword specifying the draft version
+- Contain the sub-schemas under the key `definitions` (valid for all the draft versions) or `$defs` (valid for draft 2019-09)
+- Contain only one declaration keyword, `definitions` or `$defs`, not both.
+
+## Schema Validations
+The JSON Schema spec does not define a lot of logical validations of the schemas. For example, if you declare a JSON Schema that is unsatisfiable by definition (eg. empty enum), the schema definition is valid but will always fail when validating any instance.
+In order to ensure that the schemas could be used from any API, AMF adds some schema validations on top of the basic JSON Schema validations.
+Some of this `extra` validations are:
+- Max like constraints must be greater than min like constraints. e.g.: if an array schema has maxItems and minItems, the value of maxItems must be greater than the value of minItems.
+- Enum cannot be empty
+- Pattern format is validated
+
+### References Restrictions
+
+The references from an API could not point to any part of the JSON Schema. It must point to the root schema or to one sub-schema definition.
+
+```yaml title="API RAML 1.0 with a valid JSON Schema reference"
+#%RAML 1.0
+title: Some API
+/anEndpoint:
+ get:
+   responses:
+     200:
+       body:
+         application/json:
+           type: !include /schemas/schema.json#/$defs/PersonName
+```
+
+```yaml title="API RAML 1.0 with an invalid JSON Schema reference"
+#%RAML 1.0
+title: Some API
+/anEndpoint:
+ get:
+   responses:
+     200:
+       body:
+         application/json:
+           type: !include /schemas/schema.json#/$defs/Person/properties/name
+```
+
