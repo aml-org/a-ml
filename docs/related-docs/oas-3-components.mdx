@@ -1,0 +1,76 @@
+---
+id: openapi_3_components
+title: Writing and Using OpenApi 3 Components
+sidebar_position: 6
+---
+
+## What you'll learn
+- What an OpenApi 3 Component is
+- How to write OpenApi 3 Components
+- How to use OpenApi 3 Components in your AMF Configuration setup
+
+## What is an OpenApi 3 Component ?
+
+An "OpenApi 3 Component" is a semantically valid OpenApi api spec that is defined with an empty [Paths Object](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#paths-object).
+
+The reason for writing a file of this type is to be able to reuse any item within the [Components Object](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#componentsObject)
+throughout several APIs.
+
+### Writing an OpenApi 3 Components file
+
+Writing an OpenApi 3 components file is the same as writing an OpenApi 3 API specification with fewer fields.
+An API author must consider the following aspects:
+
+- The only valid fields at the document root level are: openapi, info, components, paths.
+- The only valid fields in the "info" object are "title" and "version". For reference: [Info Object](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#infoObject)
+- The "paths" key must be an empty object.
+
+A minimal valid "OpenApi 3 Component" definition without defined components is:
+
+```yaml
+openapi: 3.0.0
+info:
+  title: My Components File
+  version: "1.0"
+paths: {}
+```
+
+### Using an OpenApi 3 Component in your AMF Configuration setup
+
+To load an use Component definitions in an AMF Configuration given an API Spec, an API author should:
+
+1. Parse the component file with the `OasConfiguration.OAS30Component` or `OasConfiguration.OASComponent` predefined configurations
+2. Load the parsed BaseUnit into a UnitCache implementation
+3. Load the UnitCache instance with the loaded units in the AMFConfiguration that will be used to parse the API Spec.
+4. Parse the API Spec
+
+This process can be seen in the examples below.
+
+**Note**: to use a Components definition file from another Components definitions file an API author must follow the same steps as above.
+
+### OpenApi 3 components Usage Code Examples
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeGetter from "/components/CodeGetter";
+
+<Tabs>
+    <TabItem value="scala" label="Scala" default>
+        <CodeGetter
+            language='scala'
+            example='OasComponentsUsageTest.scala'
+        />
+    </TabItem>
+    <TabItem value="java" label="Java">
+        <CodeGetter
+            language='java'
+            example='OasComponentsUsageTest.java'
+        />
+    </TabItem>
+    <TabItem value="ts" label="TypeScript">
+        <CodeGetter
+            language='ts'
+            example='oas-components-usage.spec.ts'
+        />
+    </TabItem>
+</Tabs>
