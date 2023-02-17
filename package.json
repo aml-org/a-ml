@@ -1,7 +1,7 @@
 {
   "name": "aml-website",
   "version": "1.0.0",
-  "author": "Ariel Mirra <amirra@mulesoft.com>",
+  "author": "Ariel Mirra <amirra@salesforce.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,18 +22,18 @@
     "build-and-serve": "npm install && npm run build && npm run serve"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.1",
-    "@docusaurus/preset-classic": "2.0.1",
-    "@mdx-js/react": "^1.6.21",
-    "@monaco-editor/react": "^3.7.3",
+    "@docusaurus/core": "2.3.1",
+    "@docusaurus/preset-classic": "2.3.1",
+    "@mdx-js/react": "^1.6.22",
+    "@monaco-editor/react": "^3.8.3",
     "bootstrap": "4.6.1",
     "classnames": "^2.2.6",
-    "clsx": "^1.1.1",
+    "clsx": "^1.2.1",
     "docusaurus-gtm-plugin": "0.0.2",
-    "docusaurus-plugin-sass": "0.2.2",
+    "docusaurus-plugin-sass": "0.2.3",
     "prism-react-renderer": "1.3.5",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0"
   },
   "browserslist": {
