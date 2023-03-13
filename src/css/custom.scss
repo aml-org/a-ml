@@ -829,7 +829,7 @@
       line-height: 16px;
       padding: 10px 9px;
       font-weight: 500;
-      color: #526881;
+      color: $royal-blue;
       background: white none;
       cursor: pointer;
     }
@@ -885,7 +885,7 @@
           line-height: 16px;
           padding: 10px 9px;
           font-weight: 500;
-          color: $slate-gray;
+          color: $royal-blue;
           @media(max-width: 767px) {
             display: block;
           }
