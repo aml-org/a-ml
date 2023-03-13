@@ -308,6 +308,17 @@ spec:
       args: ["-c", "echo Hello > /pod-data/index.html"]
 `.trim()
 
+const privacyChoicesButton = {
+    content: "",
+    backgroundImage: "url(https://www.mulesoft.com/sites/default/files/cmm_files/new-graphics-WES_updated012022.svgz)",
+    width: "26px",
+    height: "16px",
+    position: "absolute",
+    backgroundSize: "400px",
+    backgroundPosition: "51px 305px",
+    marginLeft: "8px",
+    marginTop: "4px",
+}
 const Footer = () =>
     <footer>
         <div className="container footer-sec">
@@ -315,12 +326,17 @@ const Footer = () =>
                 <div className="col-md-8 col-sm-12 footer-menu">
                     <a className="navbar-brand" href="/"><img src="img/images/AML_white.svg"/></a>
                     <ul>
-                        <li><a href="docs">Documentation</a></li>
-                        <li><a href="https://aml-org.github.io/aml-spec/vocabularies/">Specification</a></li>
+                        <li><a target="__blank" href="docs">Documentation</a></li>
+                        <li><a target="__blank" href="https://aml-org.github.io/aml-spec/vocabularies/">Specification</a></li>
                         <li>
                             <button className="ot-sdk-show-settings optanon-toggle-display removable"
                                     data-ignore-geolocation="true" id="ot-sdk-btn">Cookie preferences
                             </button>
+                        </li>
+                        <li>
+                            <a target="__blank" href="https://www.salesforce.com/form/other/privacy-request/">
+                                Your Privacy Choices <span style={privacyChoicesButton}></span>
+                            </a>
                         </li>
                     </ul>
                 </div>
