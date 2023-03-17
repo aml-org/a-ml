@@ -1,0 +1,13 @@
+---
+id: known-issues
+title: Known Issues
+sidebar_position: 1
+---
+
+There are some known behavior differences between AMF/AML and the specs that they support. In most cases these issues are not corrected because of backwards compatibility.
+
+## Case-insensitive Boolean Support
+
+According to the defined in the [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259#section-3), the accepted JSON boolean values are `true` and `false` (lower-case).
+
+Currently, SYAML, our YAML and JSON parser, is accepting boolean values in lower-case, upper-case or camel-case as valid (`true`, `TRUE`, `True`).
