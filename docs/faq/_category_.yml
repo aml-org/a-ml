@@ -1,0 +1,4 @@
+label: 'FAQ'
+#position: 2.5 # float position is supported
+position: 6
+collapsed: true # keep the category open by default
