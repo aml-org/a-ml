@@ -28,7 +28,7 @@
     "@docusaurus/theme-classic": "3.5.2",
     "@mdx-js/react": "3.0.1",
     "@monaco-editor/react": "^4.6.0",
-    "bootstrap": "4.6.1",
+    "bootstrap": "5.3.3",
     "classnames": "^2.2.6",
     "clsx": "^1.2.1",
     "docusaurus-gtm-plugin": "0.0.2",
@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "sass": "^1.35.1",
+    "sass": "1.79.3",
     "@docusaurus/module-type-aliases": "3.5.2",
     "@docusaurus/types": "3.5.2"
   }
