@@ -1,0 +1,300 @@
+---
+id: avro_schema_document
+title: AVRO Schema Document Support
+sidebar_position: 5
+---
+
+# AVRO Schema Document Support
+
+AMF supports parsing AVRO Schemas in two different ways:
+- as standalone documents defined in plain JSON as `.json` or `.avsc` files
+- inside a message payload in an AsyncAPI
+
+AMF supports ONLY the [AVRO Schema 1.9.0 specification](https://avro.apache.org/docs/1.9.0/spec.html#schemas).
+
+## Where we support and DON'T support AVRO Schemas
+We Support AVRO Schemas (inline or inside a `$ref`):
+- as standalone documents defined in plain JSON as `.json` or `.avsc` files
+  - we encourage users to use the `.avsc` file type to indicate that's an avro file
+  - must use the specific `AvroConfiguration`
+  - the avro specific document `AvroSchemaDocument` can only be parsed with the specific `AvroConfiguration`
+- inside a message payload in an AsyncAPI
+  - the key `schemaFormat` MUST be declared and specify it's an AVRO payload
+  - **we only support avro schema version 1.9.0**
+
+We don't support AVRO Schemas:
+- inside components --> schemas in an AsyncAPI
+  - because we can't determine if it's an AVRO Schema or any other schema
+
+## Requirements
+An AVRO Schema doesn't have a special key that indicates it's an AVRO Schema, nor it's version (like JSON Schema does with it's `$schema`).
+Thus, a special `AMFConfiguration` has been created to handle AVRO Documents called `AvroConfiguration`.
+
+On the other hand, Using AVRO Schemas inside AsyncAPIs requires no special configuration,
+only that the `schemaFormat` points to the 1.9.0 version, with one of the following values:
+- application/vnd.apache.avro;version=1.9.0
+- application/vnd.apache.avro+json;version=1.9.0
+- application/vnd.apache.avro+yaml;version=1.9.0
+
+For more information on how to parse documents with AMF check the [parsing documentation](/docs/amf/using-amf/amf_parsing).
+
+
+## AVRO Schema mappings to the AMF APIContract Model
+
+An AVRO Schema may be a:
+- Map
+- Array
+- Record (with fields, each one being any of the possible types)
+- Enum
+- Fixed Type
+- Primitive Type ("null", "boolean", "int", "long", "float", "double", "bytes", "string")
+
+We've parsed each AVRO Type to the following AMF Shape:
+- Map --> NodeShape with `AdditionalProperties` field for the values shape
+- Array --> ArrayShape with `Items` field for the items shape
+- Record --> NodeShape with `Properties` with a PropertyShape that contains each field shape
+- Enum --> ScalarShape with `Values` field for it's symbols
+- Fixed Type --> ScalarShape with `Datatype` field for its type and `Size` for its size
+- Primitive Type --> ScalarShape with `Datatype` field, or NilShape if its type 'null'
+
+Given that in these mappings several AVRO Types correspond to a ScalarShape or a NodeShape, **we've added the `avro-schema` annotation** with an `avroType` that contains the avro type declared before parsing.
+This way, we can know the exact type for rendering or other purposes, for example having a NodeShape and knowing if it's an avro record or a map (both are parsed as NodeShapes).
+
+We've also added 3 AVRO-specific fields to the `AnyShape` Model via the `AvroFields` trait, adding the following fields:
+- AvroNamespace
+- Aliases
+- Size
+
+
+
+## AVRO Validation
+We'll use the Apache official libraries for JVM and JS, in the version 1.11.3, due Java8 binary compatibility requirements.
+
+### Constraints
+The validation libraries differ in interfaces and implementations, and each has some constraints:
+
+### JVM avro validation library
+- validation per se is not supported, we try to parse an avro schema and throw parsing results if there are any
+- this means it's difficult to have location of where the error is thrown, we may give an approximate location from our end post-validation
+- when a validation is thrown, the rest of the file is not being searched for more validations
+- this is particularly important in large avro schemas, where many errors can be found but only one is shown
+
+### Both JVM & JS validation libraries
+- `"default"` values are not being validated when the type is `bytes`, `map`, or `array`
+- the validator treats as invalid an empty array as the default value for arrays (`"default": []`) even though the [Avro Schema Specification](https://avro.apache.org/docs/1.12.0/specification) has some examples with it
+- avro schemas of type union are not valid at the root level of the schema, but they are accepted as field types in a record or items in an array. For this reason, it is not possible to generate a `PayloadValidator` for an avro union shape.
+- the avro libraries are very restrictives with the allowed characters in naming definition (names of records for example). They only allow letters, numbers and `_` chars. We are not modifying this behavior.
+
+
+## Examples
+
+```yaml title="AsyncAPI with a valid AVRO Schema with most possible fields"
+asyncapi: 2.0.0
+info:
+  title: My API
+  version: '1.0.0'
+channels:
+  mychannel:
+    publish:
+      message:
+        schemaFormat: application/vnd.apache.avro;version=1.9.0
+        payload:
+          type: record
+          name: AllTypes
+          namespace: root
+          aliases:
+            - EveryTypeInTheSameSchema
+          doc: this schema contains every possible type you can declare in avro inside it's
+            fields
+          fields:
+            - name: boolean-primitive-type
+              doc: this is a documentation for the boolean primitive type
+              type: boolean
+              default: false
+            - name: int-primitive-type
+              doc: this is a documentation for the int primitive type
+              type: int
+              default: 123
+            - name: long-primitive-type
+              doc: this is a documentation for the long primitive type
+              type: long
+              default: 123
+            - name: float-primitive-type
+              doc: this is a documentation for the float primitive type
+              type: float
+              default: 1.0
+            - name: double-primitive-type
+              doc: this is a documentation for the double primitive type
+              type: double
+              default: 1.0
+            - name: bytes-primitive-type
+              doc: this is a documentation for the bytes primitive type
+              type: bytes
+              default: \u00FF
+            - name: string-primitive-type
+              doc: this is a documentation for the string primitive type
+              type: string
+              default: foo
+            - name: union
+              doc: this is a documentation for the union type with recursive element
+              type:
+                - null
+                - AllTypes
+              default: null
+            - type: array
+              items: long
+              default: []
+            - type: array
+              items:
+                type: array
+                items: string
+              default: []
+            - type: enum
+              name: Suit
+              symbols:
+                - SPADES
+                - HEARTS
+                - DIAMONDS
+                - CLUBS
+              default: SPADES
+            - type: fixed
+              size: 16
+              name: md5
+            - type: map
+              values: long
+              default: {}
+            - name: this is the field name # an array doesn't have name/order/aliases fields, they belong to the record field
+              doc: this is the field doc
+              order: ascending # this maps to a numeric value in the model (-1/0/1 for descending, ignore, ascending)
+              aliases:
+                - this is a field alias
+              type: array
+              items: long
+              default: []
+            - type: # type field can be a string declaring the type (like all the rest) or an object with a schema (like here)
+                type: array
+                items: string
+```
+
+```json title="AVRO Schema Document similar to the previous example"
+{
+  "type": "record",
+  "name": "AllTypes",
+  "namespace": "root",
+  "aliases": [
+    "EveryTypeInTheSameSchema"
+  ],
+  "doc": "this schema contains every possible type you can declare in avro inside it's fields",
+  "fields": [
+    {
+      "name": "booleanPrimitiveType",
+      "type": "boolean"
+    },
+    {
+      "name": "intPrimitiveType",
+      "doc": "this is a documentation for the int primitive type",
+      "type": "int",
+      "default": 123
+    },
+    {
+      "name": "longPrimitiveType",
+      "doc": "this is a documentation for the long primitive type",
+      "type": "long",
+      "default": 123
+    },
+    {
+      "name": "floatPrimitiveType",
+      "doc": "this is a documentation for the float primitive type",
+      "type": "float",
+      "default": 1.0
+    },
+    {
+      "name": "doublePrimitiveType",
+      "doc": "this is a documentation for the double primitive type",
+      "type": "double",
+      "default": 1.0
+    },
+    {
+      "name": "bytesPrimitiveType",
+      "doc": "this is a documentation for the bytes primitive type",
+      "type": "bytes"
+    },
+    {
+      "name": "stringPrimitiveType",
+      "doc": "this is a documentation for the string primitive type",
+      "type": "string",
+      "default": "foo"
+    },
+    {
+      "name": "unionProperty",
+      "doc": "this is a documentation for the union type with recursive element",
+      "type": [
+        "null",
+        "AllTypes"
+      ]
+    },
+    {
+      "name": "arrayProperty1",
+      "type": {
+        "type": "array",
+        "items": "long",
+        "default": [
+          30000000000,
+          30000000000
+        ]
+      }
+    },
+    {
+      "name": "arrayProperty2",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": "string",
+          "name": "innerArray1"
+        },
+        "default": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "enumProperty",
+      "type": {
+        "name": "Suit",
+        "type": "enum",
+        "symbols": [
+          "SPADES",
+          "HEARTS",
+          "DIAMONDS",
+          "CLUBS"
+        ],
+        "default": "SPADES"
+      }
+    },
+    {
+      "name": "propertyFixed",
+      "type": {
+        "type": "fixed",
+        "size": 16,
+        "name": "md5"
+      }
+    },
+    {
+      "name": "propertyMap",
+      "type": {
+        "type": "map",
+        "values": "long",
+        "default": {}
+      }
+    }
+  ]
+}
+```
+
