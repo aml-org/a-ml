@@ -1,10 +1,10 @@
 import React from 'react';
 import Helmet from "react-helmet";
-import Editor, {monaco} from '@monaco-editor/react';
+import Editor, {Monaco} from '@monaco-editor/react';
 
 const PLAYGROUND_URL = 'https://a.ml/playground/validation.html'
 
-function initMonaco() {
+function initMonaco(monaco) {
     monaco
         .init()
         .then(monaco => {
@@ -135,8 +135,8 @@ function initMonaco() {
         .catch(error => console.error('An error occurred during initialization of Monaco: ', error));
 }
 
-function handleEditorDidMount(_, editor) {
-    initMonaco()
+function handleEditorDidMount(editor, monaco) {
+    initMonaco(monaco)
 }
 
 const editorOptions = {
@@ -155,7 +155,7 @@ const editorOptions = {
     },
     tabSize: 2,
     fontFamily: 'Roboto Mono',
-    fontWeight: 500
+    fontWeight: "500"
 }
 
 const editorStyle = {width: "100%", height: "519px", float: "left"}
@@ -440,6 +440,7 @@ const Editors = () =>
                         <div id="dialect-container" style={editorStyle}>
                             <Editor
                                 value={dialectCode}
+                                defaultLanguage="yaml"
                                 options={editorOptions}
                                 editorDidMount={handleEditorDidMount}
                             />
@@ -452,6 +453,7 @@ const Editors = () =>
                         <div id="document-container" style={editorStyle}>
                             <Editor
                                 value={documentCode}
+                                defaultLanguage="yaml"
                                 options={editorOptions}
                                 editorDidMount={handleEditorDidMount}
                             />

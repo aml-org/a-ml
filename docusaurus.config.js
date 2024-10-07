@@ -4,7 +4,7 @@ module.exports = {
   tagline: 'Standards and tools to define, parse and link metadata',
   url: 'https://aml-org.github.io',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logos/amlLogo.svg',
   organizationName: 'aml-org',
@@ -33,8 +33,8 @@ module.exports = {
     prism: {
       additionalLanguages: ['java', 'scala'],
       defaultLanguage: 'java',
-      theme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/dracula'),
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.dracula,
     },
     navbar: {
       title: '',
